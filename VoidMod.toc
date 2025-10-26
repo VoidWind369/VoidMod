@@ -1,0 +1,8 @@
+## Interface: 110205
+## Title: VoidMod
+## Notes: 简单嗜血buff监控和语音提示
+## Author: Muzixi
+## Version: 1.0
+
+VoidMod.lua
+TotemWeaponMonitor.lua
