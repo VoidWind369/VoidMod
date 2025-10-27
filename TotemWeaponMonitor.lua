@@ -125,18 +125,18 @@ end
 
 function frame:GetGradientColors(dotIndex, alpha)
     -- 饱满的金属渐变色
-    if dotIndex <= 3 then
+    if dotIndex <= 4 then
         -- 蓝色金属
         return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
-    elseif dotIndex <= 6 then
-        -- 绿色金属
-        return CreateColor(0.9, 1.0, 0.8, alpha), CreateColor(0.3, 0.7, 0.3, alpha)
-    elseif dotIndex <= 8 then
+    elseif dotIndex <= 7 then
         -- 金色金属
         return CreateColor(1.0, 1.0, 0.7, alpha), CreateColor(0.8, 0.6, 0.2, alpha)
+    elseif dotIndex <= 9 then
+        -- 橙色金属
+        return CreateColor(1.0, 0.8, 0.7, alpha), CreateColor(1.0, 0.5, 0.1, alpha)
     else
         -- 红色金属
-        return CreateColor(1.0, 0.8, 0.6, alpha), CreateColor(0.9, 0.3, 0.1, alpha)
+        return CreateColor(1.0, 0.4, 0.4, alpha), CreateColor(1.0, 0.0, 0.0, alpha)
     end
 end
 
