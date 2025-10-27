@@ -97,12 +97,13 @@ function frame:CreateDotProgress()
 end
 
 function frame:UpdateDotProgress(stacks)
+    local alpha = 0.9
     for i = 1, MAX_STACKS do
         local dot = self.dots[i]
 
         if i <= stacks then
             -- 激活的小圆点 - 饱满的纵向渐变
-            local topColor, bottomColor = self:GetGradientColors(i)
+            local topColor, bottomColor = self:GetGradientColors(i, alpha)
             dot.tex:SetGradient("VERTICAL", topColor, bottomColor)
 
             -- 发光效果
@@ -113,8 +114,8 @@ function frame:UpdateDotProgress(stacks)
         else
             -- 未激活的小圆点 - 深灰色渐变
             dot.tex:SetGradient("VERTICAL",
-                    CreateColor(0.5, 0.5, 0.5, 0.9),
-                    CreateColor(0.2, 0.2, 0.2, 0.9)
+                    CreateColor(0.5, 0.5, 0.5, alpha),
+                    CreateColor(0.2, 0.2, 0.2, alpha)
             )
             dot.glow:Hide()
             dot:SetAlpha(0.2)
@@ -122,20 +123,20 @@ function frame:UpdateDotProgress(stacks)
     end
 end
 
-function frame:GetGradientColors(dotIndex)
+function frame:GetGradientColors(dotIndex, alpha)
     -- 饱满的金属渐变色
     if dotIndex <= 3 then
         -- 蓝色金属
-        return CreateColor(0.8, 0.9, 1.0, 0.7), CreateColor(0.2, 0.4, 0.9, 0.7)
+        return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
     elseif dotIndex <= 6 then
         -- 绿色金属
-        return CreateColor(0.9, 1.0, 0.8, 0.7), CreateColor(0.3, 0.7, 0.3, 0.7)
+        return CreateColor(0.9, 1.0, 0.8, alpha), CreateColor(0.3, 0.7, 0.3, alpha)
     elseif dotIndex <= 8 then
         -- 金色金属
-        return CreateColor(1.0, 1.0, 0.7, 0.7), CreateColor(0.8, 0.6, 0.2, 0.7)
+        return CreateColor(1.0, 1.0, 0.7, alpha), CreateColor(0.8, 0.6, 0.2, alpha)
     else
         -- 红色金属
-        return CreateColor(1.0, 0.8, 0.6, 0.7), CreateColor(0.9, 0.3, 0.1, 0.7)
+        return CreateColor(1.0, 0.8, 0.6, alpha), CreateColor(0.9, 0.3, 0.1, alpha)
     end
 end
 
@@ -150,19 +151,6 @@ function frame:UpdateTotemWeaponStacks()
 
         -- 显示框架
         self.dotFrame:Show()
-
-        -- 层数变化时播放音效
-        if currentStacks ~= lastStacks then
-            if currentStacks > lastStacks then
-                -- 层数增加时播放音效
-                if currentStacks == 10 then
-                    PlaySound(SOUNDKIT.RAID_WARNING) -- 满层特殊音效
-                else
-                    PlaySound(SOUNDKIT.UI_70_SOUL_ASH_UI_MAW_ENERGY_GAIN)
-                end
-            end
-            lastStacks = currentStacks
-        end
 
     else
         -- 没有buff时隐藏
