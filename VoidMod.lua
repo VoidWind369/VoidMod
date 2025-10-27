@@ -59,11 +59,6 @@ function frame:Initialize()
             self:PrintHelp()
         end
     end
-    
-    -- 每秒检查一次
-    C_Timer.NewTicker(1, function()
-        self:CheckBloodlust()
-    end)
 end
 
 function frame:CheckBloodlust()
