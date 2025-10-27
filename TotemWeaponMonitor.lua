@@ -40,11 +40,6 @@ function frame:Initialize()
     SlashCmdList["TOTEM_WEAPON"] = function(msg)
         self:HandleSlashCommand(msg)
     end
-
-    -- 每秒更新一次
-    C_Timer.NewTicker(1, function()
-        self:UpdateTotemWeaponStacks()
-    end)
 end
 
 function frame:CreateDotProgress()
