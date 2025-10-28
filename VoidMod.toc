@@ -5,5 +5,5 @@
 ## Version: 1.0
 
 VoidMod.lua
-BloodlustSimple.lua
-TotemWeaponMonitor.lua
+module\BloodlustSimple.lua
+module\TotemWeaponMonitor.lua

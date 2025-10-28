@@ -19,8 +19,8 @@ local bloodlust = {
     },
 
     -- 语音文件路径
-    voice_file = "Interface\\AddOns\\VoidMod\\void_voice.ogg",
-    yurin = "Interface\\AddOns\\VoidMod\\yurin.wav",
+    voice_file = "Interface/AddOns/VoidMod/media/void_voice.ogg",
+    yurin = "Interface/AddOns/VoidMod/media/yurin.wav",
 
     hasBloodlust = false,
     lastPlayTime = 0,
@@ -69,11 +69,6 @@ function VoidFrame:OnBloodlustGained(buffName, spellId, ogg)
 
     -- 屏幕提示
     self:ShowSimpleAlert(buffName)
-end
-
-function VoidFrame:TestAlert(ogg)
-    DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00测试嗜血提示...|r")
-    self:OnBloodlustGained("嗜血测试", 2825, ogg)
 end
 
 function VoidFrame:PlayBloodlustVoice(ogg)
@@ -140,4 +135,9 @@ function VoidFrame:DebugEleBuff()
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000未找到" .. spellName .. "护盾|r")
         end
     end
+end
+
+function VoidFrame:TestAlert(ogg)
+    DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00测试嗜血提示...|r")
+    self:OnBloodlustGained("嗜血测试", 2825, ogg)
 end
