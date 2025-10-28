@@ -1,57 +1,31 @@
--- 创建主框架
-local frame = CreateFrame("Frame", "TotemWeaponMonitorFrame", UIParent)
-frame:RegisterEvent("PLAYER_LOGIN")
-frame:RegisterEvent("UNIT_AURA")
+local totemWeapon = {
+    -- 漩涡武器法术ID
+    totemWeapon_spell_id = 344179,
 
--- 漩涡武器法术ID
-local TOTEM_WEAPON_SPELL_ID = 344179
+    -- 显示设置
+    max_stacks = 10,
+    dot_size = 25, -- 每个小圆点的大小
+    dot_spacing = 6, -- 圆点间距
+    position_x = 0,
+    position_y = -260,
 
--- 显示设置
-local MAX_STACKS = 10
-local DOT_SIZE = 25           -- 每个小圆点的大小
-local DOT_SPACING = 6         -- 圆点间距
-local BAR_WIDTH = (DOT_SIZE + DOT_SPACING) * MAX_STACKS
-local BAR_HEIGHT = DOT_SIZE + 10
-local POSITION_X = 0
-local POSITION_Y = -260
+    currentStacks = 0,
+    lastStacks = 0,
+}
 
-local currentStacks = 0
-local lastStacks = 0
+function VoidFrame:CreateDotProgress()
+    local bar_width = (totemWeapon.dot_size + totemWeapon.dot_spacing) * totemWeapon.max_stacks
+    local bar_height = totemWeapon.dot_size + 10
 
-frame:SetScript("OnEvent", function(self, event, ...)
-    if event == "PLAYER_LOGIN" then
-        self:Initialize()
-    elseif event == "UNIT_AURA" then
-        local unit = ...
-        if unit == "player" then
-            self:UpdateTotemWeaponStacks()
-        end
-    end
-end)
-
-function frame:Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00漩涡武器小圆点监控已加载|r")
-
-    -- 创建小圆点显示框架
-    self:CreateDotProgress()
-
-    -- 注册斜杠命令
-    SLASH_TOTEM_WEAPON1 = "/twm"
-    SlashCmdList["TOTEM_WEAPON"] = function(msg)
-        self:HandleSlashCommand(msg)
-    end
-end
-
-function frame:CreateDotProgress()
     -- 主框架
     self.dotFrame = CreateFrame("Frame", nil, UIParent)
-    self.dotFrame:SetSize(BAR_WIDTH, BAR_HEIGHT)
-    self.dotFrame:SetPoint("CENTER", POSITION_X, POSITION_Y)
+    self.dotFrame:SetSize(bar_width, bar_height)
+    self.dotFrame:SetPoint("CENTER", totemWeapon.position_x, totemWeapon.position_y)
     self.dotFrame:SetFrameStrata("HIGH")
 
     -- 背景条
     self.dotFrame.background = self.dotFrame:CreateTexture(nil, "BACKGROUND")
-    self.dotFrame.background:SetSize(BAR_WIDTH + DOT_SPACING, BAR_HEIGHT + DOT_SPACING)
+    self.dotFrame.background:SetSize(bar_width + totemWeapon.dot_spacing, bar_height + totemWeapon.dot_spacing)
     self.dotFrame.background:SetPoint("CENTER")
     self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
     self.dotFrame.background:SetGradient("VERTICAL",
@@ -62,21 +36,21 @@ function frame:CreateDotProgress()
     -- 创建10个小圆点
     self.dots = {}
 
-    for i = 1, MAX_STACKS do
+    for i = 1, totemWeapon.max_stacks do
         local dot = CreateFrame("Frame", nil, self.dotFrame)
-        dot:SetSize(DOT_SIZE, DOT_SIZE)
-        dot:SetPoint("LEFT", (i - 1) * (DOT_SIZE + DOT_SPACING) + (DOT_SPACING / 2), 0)
+        dot:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
+        dot:SetPoint("LEFT", (i - 1) * (totemWeapon.dot_size + totemWeapon.dot_spacing) + (totemWeapon.dot_spacing / 2), 0)
 
         -- 发光效果
         dot.glow = dot:CreateTexture(nil, "BACKGROUND")
-        dot.glow:SetSize(DOT_SIZE, DOT_SIZE)
+        dot.glow:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
         dot.glow:SetPoint("CENTER")
         dot.glow:SetBlendMode("ADD")
         dot.glow:Hide()
 
         -- 小圆点纹理 - 使用白色纹理然后通过渐变上色
         dot.tex = dot:CreateTexture(nil, "OVERLAY")
-        dot.tex:SetSize(DOT_SIZE, DOT_SIZE)
+        dot.tex:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
         dot.tex:SetPoint("CENTER")
 
         -- 关键：使用白色方形纹理，渐变会覆盖颜色
@@ -96,9 +70,9 @@ function frame:CreateDotProgress()
     self.dotFrame:Hide()
 end
 
-function frame:UpdateDotProgress(stacks)
+function VoidFrame:UpdateDotProgress(stacks)
     local alpha = 0.9
-    for i = 1, MAX_STACKS do
+    for i = 1, totemWeapon.max_stacks do
         local dot = self.dots[i]
 
         if i <= stacks then
@@ -123,7 +97,7 @@ function frame:UpdateDotProgress(stacks)
     end
 end
 
-function frame:GetGradientColors(dotIndex, alpha)
+function VoidFrame:GetGradientColors(dotIndex, alpha)
     -- 饱满的金属渐变色
     if dotIndex <= 4 then
         -- 蓝色金属
@@ -140,43 +114,27 @@ function frame:GetGradientColors(dotIndex, alpha)
     end
 end
 
-function frame:UpdateTotemWeaponStacks()
-    local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", TOTEM_WEAPON_SPELL_ID)
+function VoidFrame:UpdateTotemWeaponStacks()
+    local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
 
     if auraData then
-        currentStacks = auraData.applications or 1
+        totemWeapon.currentStacks = auraData.applications or 1
 
         -- 更新小圆点进度
-        self:UpdateDotProgress(currentStacks)
+        self:UpdateDotProgress(totemWeapon.currentStacks)
 
         -- 显示框架
         self.dotFrame:Show()
 
     else
         -- 没有buff时隐藏
-        currentStacks = 0
-        lastStacks = 0
+        totemWeapon.currentStacks = 0
+        totemWeapon.lastStacks = 0
         self.dotFrame:Hide()
     end
 end
 
-function frame:HandleSlashCommand(msg)
-    local command = strlower(strtrim(msg))
-
-    if command == "test" then
-        self:TestDisplay()
-    elseif command == "move" then
-        self:ToggleMoveMode()
-    elseif command == "reset" then
-        self:ResetPosition()
-    elseif command == "scale" then
-        self:ToggleScale()
-    else
-        self:PrintHelp()
-    end
-end
-
-function frame:TestDisplay()
+function VoidFrame:TestDisplay()
     -- 测试显示不同层数
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00测试小圆点进度...|r")
 
@@ -192,15 +150,15 @@ function frame:TestDisplay()
     end, 10) -- 测试10秒
 
     C_Timer.After(10.5, function()
-        if currentStacks == 0 then
+        if totemWeapon.currentStacks == 0 then
             self.dotFrame:Hide()
         else
-            self:UpdateDotProgress(currentStacks)
+            self:UpdateDotProgress(totemWeapon.currentStacks)
         end
     end)
 end
 
-function frame:ToggleMoveMode()
+function VoidFrame:ToggleMoveMode()
     if self.dotFrame:IsMovable() then
         self.dotFrame:EnableMouse(false)
         self.dotFrame:SetMovable(false)
@@ -220,14 +178,14 @@ function frame:ToggleMoveMode()
     end
 end
 
-function frame:ResetPosition()
+function VoidFrame:ResetPosition()
     self.dotFrame:ClearAllPoints()
-    self.dotFrame:SetPoint("CENTER", POSITION_X, POSITION_Y)
+    self.dotFrame:SetPoint("CENTER", totemWeapon.position_x, totemWeapon.position_y)
     self.dotFrame:SetScale(1)
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00位置和大小已重置|r")
 end
 
-function frame:ToggleScale()
+function VoidFrame:ToggleScale()
     local currentScale = self.dotFrame:GetScale()
     if currentScale == 1 then
         self.dotFrame:SetScale(1.3)
@@ -241,24 +199,15 @@ function frame:ToggleScale()
     end
 end
 
-function frame:PrintHelp()
-    DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00漩涡武器小圆点监控命令:|r")
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00/twm test|r - 测试显示效果")
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00/twm move|r - 切换移动模式")
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00/twm scale|r - 切换大小")
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00/twm reset|r - 重置位置和大小")
-    DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00/twm|r - 显示帮助")
-end
-
 -- 保存配置
 local function SavePosition()
-    if frame.dotFrame then
-        local point, relativeTo, relativePoint, xOfs, yOfs = frame.dotFrame:GetPoint()
+    if VoidFrame.dotFrame then
+        local point, relativeTo, relativePoint, xOfs, yOfs = VoidFrame.dotFrame:GetPoint()
         TOTEM_WEAPON_MONITOR_POSITION = {
             point = point,
             x = xOfs,
             y = yOfs,
-            scale = frame.dotFrame:GetScale()
+            scale = VoidFrame.dotFrame:GetScale()
         }
     end
 end
@@ -266,15 +215,15 @@ end
 -- 加载保存的位置
 local function LoadPosition()
     if TOTEM_WEAPON_MONITOR_POSITION then
-        frame.dotFrame:ClearAllPoints()
-        frame.dotFrame:SetPoint(
+        VoidFrame.dotFrame:ClearAllPoints()
+        VoidFrame.dotFrame:SetPoint(
                 TOTEM_WEAPON_MONITOR_POSITION.point or "CENTER",
                 UIParent,
                 TOTEM_WEAPON_MONITOR_POSITION.point or "CENTER",
-                TOTEM_WEAPON_MONITOR_POSITION.x or POSITION_X,
-                TOTEM_WEAPON_MONITOR_POSITION.y or POSITION_Y
+                TOTEM_WEAPON_MONITOR_POSITION.x or totemWeapon.position_x,
+                TOTEM_WEAPON_MONITOR_POSITION.y or totemWeapon.position_y
         )
-        frame.dotFrame:SetScale(TOTEM_WEAPON_MONITOR_POSITION.scale or 1)
+        VoidFrame.dotFrame:SetScale(TOTEM_WEAPON_MONITOR_POSITION.scale or 1)
     end
 end
 

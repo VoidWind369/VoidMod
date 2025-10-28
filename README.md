@@ -1,2 +1,2 @@
 # Void Mod
-#### An World for Warcraft Mod
+#### A World for Warcraft Mod
