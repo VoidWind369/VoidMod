@@ -7,7 +7,7 @@ local totemWeapon = {
     dot_size = 25, -- 每个小圆点的大小
     dot_spacing = 6, -- 圆点间距
     position_x = 0,
-    position_y = -260,
+    position_y = 80,
 
     currentStacks = 0,
     lastStacks = 0,
