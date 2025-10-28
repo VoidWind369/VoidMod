@@ -26,13 +26,13 @@ local bloodlust = {
     lastPlayTime = 0,
 }
 
+---# 监控嗜血buff
 function VoidFrame:CheckBloodlust()
     local foundBuff = false
     local buffName = ""
     local spellIdFound = 0
 
-    -- 使用C_UnitAuras.GetUnitAuraBySpellID
-    for bloodlustId, bloodlustName in pairs(bloodlust.bloodlust_spell_ids) do
+    for bloodlustId, _ in pairs(bloodlust.bloodlust_spell_ids) do
         local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", bloodlustId)
         if auraData then
             foundBuff = true
@@ -71,8 +71,9 @@ function VoidFrame:OnBloodlustGained(buffName, spellId, ogg)
     self:ShowSimpleAlert(buffName)
 end
 
+---# 播放外部语音文件
+---@param ogg table
 function VoidFrame:PlayBloodlustVoice(ogg)
-    -- 播放外部语音文件
     if PlaySoundFile then
         if ogg == "ogg" then
             PlaySoundFile(bloodlust.voice_file, "Master")
@@ -87,7 +88,7 @@ end
 
 function VoidFrame:ShowSimpleAlert(buffName)
     -- 屏幕中央错误提示
-    UIErrorsFrame:AddMessage("💥 " .. buffName .. "！", 1.0, 1.0, 0.0, 1.0)
+    UIErrorsFrame:AddMessage("※ " .. buffName .. "！", 1.0, 1.0, 0.0, 1.0)
 
     -- 创建大文字提示
     if not self.alertText then
@@ -110,6 +111,9 @@ function VoidFrame:ShowSimpleAlert(buffName)
     UIFrameFade(self.alertText, self.alertText.fadeInfo)
 end
 
+---# 检测嗜血Buff
+---* 任意职业测试时
+---* 需有嗜血职业组队
 function VoidFrame:DebugBuffs()
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00=== 嗜血Buff检测 ===|r")
     for bloodlustId, bloodlustName in pairs(bloodlust.bloodlust_spell_ids) do
@@ -125,6 +129,8 @@ function VoidFrame:DebugBuffs()
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00当前嗜血状态: " .. (bloodlust.hasBloodlust and "|cFF00FF00已激活|r" or "|cFFFF0000未激活|r"))
 end
 
+---# 检测萨满三种元素护盾
+---* 使用萨满作为测试职业时
 function VoidFrame:DebugEleBuff()
     DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00护盾Buff检测|r")
     for spellId, spellName in pairs(bloodlust.d_spell_ids) do
@@ -137,6 +143,8 @@ function VoidFrame:DebugEleBuff()
     end
 end
 
+---# 嗜血测试
+---@param ogg table
 function VoidFrame:TestAlert(ogg)
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00测试嗜血提示...|r")
     self:OnBloodlustGained("嗜血测试", 2825, ogg)
