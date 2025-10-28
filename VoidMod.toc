@@ -7,3 +7,4 @@
 VoidMod.lua
 module\BloodlustSimple.lua
 module\TotemWeaponMonitor.lua
+module\MessageBot.lua

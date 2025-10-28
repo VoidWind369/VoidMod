@@ -2,19 +2,24 @@
 VoidFrame = CreateFrame("Frame", "VoidModFrame", UIParent)
 VoidFrame:RegisterEvent("PLAYER_LOGIN")
 VoidFrame:RegisterEvent("UNIT_AURA")
+VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")
 
-VoidFrame:SetScript("OnEvent", function(self, event, unit, ...)
+VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
         self:Initialize()
     elseif event == "UNIT_AURA" then
+        local unit = ...
         if unit == "player" then
             self:CheckBloodlust()
             self:UpdateTotemWeaponStacks()
         end
+    elseif event == "CHAT_MSG_WHISPER" then
+        self:MessageStart(...)
     end
 end)
 
 function VoidFrame:Initialize()
+    self:ClientInfo()
     -- 创建小圆点显示框架
     self:CreateDotProgress()
 
@@ -46,8 +51,14 @@ function VoidFrame:HandleSlashCommand(msg)
     elseif command == "twm scale" then
         self:ToggleScale()
     else
+        self:ClientInfo()
         self:PrintHelp()
     end
+end
+
+function VoidFrame:ClientInfo()
+    local version, build, date, toc_version = GetBuildInfo()
+    print("|cFF33937FVoidMod|r |cFF69CCF0Client|r |cFF00FF00Info:|r \n » Version: " .. version .. "\n » Build: " .. build .. "\n » Date: " .. date .. "\n » TocVersion: " .. toc_version)
 end
 
 function VoidFrame:PrintHelp()
