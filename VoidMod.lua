@@ -3,6 +3,7 @@ VoidFrame = CreateFrame("Frame", "VoidModFrame", UIParent)
 VoidFrame:RegisterEvent("PLAYER_LOGIN")
 VoidFrame:RegisterEvent("UNIT_AURA")
 VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")
+VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST")
 
 VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
@@ -15,6 +16,8 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         end
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
+    elseif event == "PARTY_INVITE_REQUEST" then
+        self:PartyStart(...)
     end
 end)
 
