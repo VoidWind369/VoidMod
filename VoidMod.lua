@@ -26,6 +26,9 @@ function VoidFrame:Initialize()
     -- 创建小圆点显示框架
     self:CreateDotProgress()
 
+    -- 打印玩家属性
+    self:Void_PlayerInfo()
+
     -- 注册斜杠命令
     SLASH_VOID_MOD1 = "/void"
     SlashCmdList["VOID_MOD"] = function(msg)
