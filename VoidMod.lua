@@ -11,6 +11,7 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "UNIT_AURA" then
         local unit = ...
         if unit == "player" then
+            self:Void_UpdatePlayerInfoDisplay()
             self:CheckBloodlust()
             self:UpdateTotemWeaponStacks()
         end
@@ -25,6 +26,7 @@ function VoidFrame:Initialize()
     self:ClientInfo()
     -- 创建小圆点显示框架
     self:CreateDotProgress()
+    self:Void_CreatePlayerInfoDisplay()
 
     -- 打印玩家属性
     self:Void_PlayerInfo()
@@ -56,6 +58,8 @@ function VoidFrame:HandleSlashCommand(msg)
         self:ResetPosition()
     elseif command == "twm scale" then
         self:ToggleScale()
+    elseif command == "info" then
+        self:Void_PlayerInfo()
     else
         self:ClientInfo()
         self:PrintHelp()

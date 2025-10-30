@@ -4,10 +4,10 @@ local totemWeapon = {
 
     -- 显示设置
     max_stacks = 10,
-    dot_size = 25, -- 每个小圆点的大小
+    dot_size = 30, -- 每个小圆点的大小
     dot_spacing = 6, -- 圆点间距
     position_x = 0,
-    position_y = 80,
+    position_y = 20,
 
     currentStacks = 0,
     lastStacks = 0,
@@ -71,7 +71,7 @@ function VoidFrame:CreateDotProgress()
 end
 
 function VoidFrame:UpdateDotProgress(stacks)
-    local alpha = 0.9
+    local alpha = 1.0
     for i = 1, totemWeapon.max_stacks do
         local dot = self.dots[i]
 

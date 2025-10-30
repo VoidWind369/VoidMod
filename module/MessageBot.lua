@@ -24,22 +24,28 @@ end
 
 function VoidFrame:Void_PlayerInfo()
     -- 主属性
-    local strength = UnitAttackPower("player", 1)
-    local agility = UnitAttackPower("player", 2)
-    local stamina = UnitAttackPower("player", 3)
-    local intellect = UnitAttackPower("player", 4)
-
-    local attackPower = UnitAttackPower("player")
-    local spellHaste = UnitSpellHaste("player")
-    local armor = UnitArmor("player")
-    local currentSpeed = GetUnitSpeed("player")
+    local health = UnitHealth("player")
+    local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
-    local spellHastePercent = UnitSpellHaste("player")
-    local critChance = GetCritChance()
-    local mastery = GetMastery()
-    local hitBonus = GetCombatRatingBonus(CR_HIT_MELEE)
-    print("基础属性\n力量：" .. strength .. "\n敏捷：" .. agility .. "\n耐力：" .. stamina .. "\n智力：" .. intellect)
-    print("战斗属性\n攻击强度：" .. attackPower .. "\n法术强度：" .. spellHaste .. "\n护甲：" .. armor .. "\n移动速度：" .. currentSpeed)
-    print("强化属性\n急速：" .. spellHastePercent .. "\n暴击：" .. critChance .. "\n精通：" .. mastery .. "\n全能：" .. hitBonus)
+    local crit = GetCritChance()
+    local haste = GetHaste()
+    local mastery = GetMasteryEffect()
+    local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
+    local first = string.format("|cFCF00FF0基础属性|r\n|cFFFFFF00生命：%d\n法力：%d|r", health, power)
+    local info = string.format("|cFCF00FF0强化属性|r\n|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
+    print(first)
+    print(info)
+    return string.format("%s\n%s", first, info)
+end
+
+function VoidFrame:Void_CreatePlayerInfoDisplay()
+    self.voidPlayerInfoText = UIParent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.voidPlayerInfoText:SetPoint("CENTER", -470, -400)
+    self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
+    self.voidPlayerInfoText:SetTextColor(1, 0, 0, 1) -- 红色
+end
+
+function VoidFrame:Void_UpdatePlayerInfoDisplay()
+    self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
 end
