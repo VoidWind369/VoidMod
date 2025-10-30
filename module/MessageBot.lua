@@ -34,8 +34,6 @@ function VoidFrame:Void_PlayerInfo()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
     local first = string.format("|cFCF00FF0基础属性|r\n|cFFFFFF00生命：%d\n法力：%d|r", health, power)
     local info = string.format("|cFCF00FF0强化属性|r\n|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
-    print(first)
-    print(info)
     return string.format("%s\n%s", first, info)
 end
 
