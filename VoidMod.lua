@@ -4,6 +4,7 @@ VoidFrame:RegisterEvent("PLAYER_LOGIN")
 VoidFrame:RegisterEvent("UNIT_AURA")
 VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")
 VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST")
+VoidFrame:RegisterEvent("UNIT_COMBAT")
 
 VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
@@ -11,7 +12,6 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "UNIT_AURA" then
         local unit = ...
         if unit == "player" then
-            self:Void_UpdatePlayerInfoDisplay()
             self:CheckBloodlust()
             self:UpdateTotemWeaponStacks()
         end
@@ -19,6 +19,8 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         self:MessageStart(...)
     elseif event == "PARTY_INVITE_REQUEST" then
         self:PartyStart(...)
+    elseif event == "UNIT_COMBAT" then
+        self:Void_UpdatePlayerInfoDisplay()
     end
 end)
 
