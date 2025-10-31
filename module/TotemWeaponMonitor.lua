@@ -4,10 +4,10 @@ local totemWeapon = {
 
     -- 显示设置
     max_stacks = 10,
-    dot_size = 30, -- 每个小圆点的大小
-    dot_spacing = 6, -- 圆点间距
+    dot_size = 36, -- 每个小圆点的大小
+    dot_spacing = 1, -- 圆点间距
     position_x = 0,
-    position_y = 20,
+    position_y = -260,
 
     currentStacks = 0,
     lastStacks = 0,
@@ -28,9 +28,10 @@ function VoidFrame:CreateDotProgress()
     self.dotFrame.background:SetSize(bar_width + totemWeapon.dot_spacing, bar_height + totemWeapon.dot_spacing)
     self.dotFrame.background:SetPoint("CENTER")
     self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
+    self.dotFrame.background:SetTexture(130937)
     self.dotFrame.background:SetGradient("VERTICAL",
-            CreateColor(0, 0, 0, 0.25),
-            CreateColor(0.2, 0.2, 0.2, 0.45)
+            CreateColor(0, 0, 0, 0.15),
+            CreateColor(0.2, 0.2, 0.2, 0.2)
     )
 
     -- 创建10个小圆点
@@ -54,24 +55,33 @@ function VoidFrame:CreateDotProgress()
         dot.tex:SetPoint("CENTER")
 
         -- 关键：使用白色方形纹理，渐变会覆盖颜色
-        dot.tex:SetTexture("Interface\\Buttons\\WHITE8x8")
-        dot.glow:SetTexture("Interface\\Buttons\\WHITE8x8")
+        --dot.tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+        --dot.glow:SetTexture("Interface\\Buttons\\WHITE8x8")
+
+        dot.tex:SetTexture(518448)
+        dot.glow:SetTexture(518448)
+
+        dot.tex:SetVertexColor(1, 1, 1, 1)
+        dot.glow:SetVertexColor(1, 1, 1, 0.2)
 
         -- 初始状态
-        dot.tex:SetGradient("VERTICAL",
-                CreateColor(0.5, 0.5, 0.5, 0.9),
-                CreateColor(0.2, 0.2, 0.2, 0.9)
-        )
+        --dot.tex:SetGradient("VERTICAL",
+        --        CreateColor(0.5, 0.5, 0.5, 0.9),
+        --        CreateColor(0.2, 0.2, 0.2, 0.9)
+        --)
 
         self.dots[i] = dot
     end
 
-    -- 初始隐藏
-    self.dotFrame:Hide()
+    -- 不是增强初始隐藏
+    local specID = GetSpecializationInfo(GetSpecialization())
+    if not specID == 263 then
+        self.dotFrame:Hide()
+    end
 end
 
 function VoidFrame:UpdateDotProgress(stacks)
-    local alpha = 1.0
+    local alpha = 1
     for i = 1, totemWeapon.max_stacks do
         local dot = self.dots[i]
 
@@ -84,7 +94,7 @@ function VoidFrame:UpdateDotProgress(stacks)
             dot.glow:SetGradient("VERTICAL", topColor, bottomColor)
             dot.glow:SetAlpha(0.2)
             dot.glow:Show()
-            dot:SetAlpha(0.5)
+            dot:SetAlpha(1)
         else
             -- 未激活的小圆点 - 深灰色渐变
             dot.tex:SetGradient("VERTICAL",
@@ -92,7 +102,7 @@ function VoidFrame:UpdateDotProgress(stacks)
                     CreateColor(0.2, 0.2, 0.2, alpha)
             )
             dot.glow:Hide()
-            dot:SetAlpha(0.2)
+            dot:SetAlpha(0.3)
         end
     end
 end
@@ -130,7 +140,10 @@ function VoidFrame:UpdateTotemWeaponStacks()
         -- 没有buff时隐藏
         totemWeapon.currentStacks = 0
         totemWeapon.lastStacks = 0
-        self.dotFrame:Hide()
+        local specID = GetSpecializationInfo(GetSpecialization())
+        if not specID == 263 then
+            self.dotFrame:Hide()
+        end
     end
 end
 

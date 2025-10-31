@@ -14,6 +14,7 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         if unit == "player" then
             self:CheckBloodlust()
             self:UpdateTotemWeaponStacks()
+            self:Void_UpdatePlayerInfoDisplay()
         end
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
