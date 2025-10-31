@@ -41,7 +41,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay()
     self.voidPlayerInfoText = UIParent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     self.voidPlayerInfoText:SetPoint("CENTER", -470, -400)
     self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
-    self.voidPlayerInfoText:SetTextColor(1, 0, 0, 1) -- 红色
+    self.voidPlayerInfoText:SetTextScale(1.2)
 end
 
 function VoidFrame:Void_UpdatePlayerInfoDisplay()
