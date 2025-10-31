@@ -74,7 +74,7 @@ function VoidFrame:CreateDotProgress()
 
     -- 不是增强初始隐藏
     local specID = GetSpecializationInfo(GetSpecialization())
-    if not specID == 263 then
+    if specID ~= 263 then
         self.dotFrame:Hide()
     end
 end
@@ -125,19 +125,21 @@ end
 function VoidFrame:UpdateTotemWeaponStacks()
     local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
 
-    if auraData then
-        totemWeapon.currentStacks = auraData.applications or 0
-        -- 显示框架
+    -- 判断是否增强萨满
+    local specID = GetSpecializationInfo(GetSpecialization())
+    if specID == 263 then
         self.dotFrame:Show()
     else
-        -- 没有buff时隐藏
+        self.dotFrame:Hide()
+    end
+
+    if auraData then
+        totemWeapon.currentStacks = auraData.applications or 0
+    else
         totemWeapon.currentStacks = 0
         totemWeapon.lastStacks = 0
-        local specID = GetSpecializationInfo(GetSpecialization())
-        if not specID == 263 then
-            self.dotFrame:Hide()
-        end
     end
+
     -- 更新小圆点进度
     self:UpdateDotProgress(totemWeapon.currentStacks)
 end
