@@ -45,6 +45,7 @@ function VoidFrame:CreateDotProgress()
         -- 发光效果
         dot.glow = dot:CreateTexture(nil, "BACKGROUND")
         dot.glow:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
+        dot.glow:SetAlpha(0.2)
         dot.glow:SetPoint("CENTER")
         dot.glow:SetBlendMode("ADD")
         dot.glow:Hide()
@@ -61,14 +62,12 @@ function VoidFrame:CreateDotProgress()
         dot.tex:SetTexture(518448)
         dot.glow:SetTexture(518448)
 
-        dot.tex:SetVertexColor(1, 1, 1, 1)
-        dot.glow:SetVertexColor(1, 1, 1, 0.2)
-
         -- 初始状态
-        --dot.tex:SetGradient("VERTICAL",
-        --        CreateColor(0.5, 0.5, 0.5, 0.9),
-        --        CreateColor(0.2, 0.2, 0.2, 0.9)
-        --)
+        dot.tex:SetGradient("VERTICAL",
+                CreateColor(0.5, 0.5, 0.5, 1),
+                CreateColor(0.2, 0.2, 0.2, 1)
+        )
+        dot:SetAlpha(0.3)
 
         self.dots[i] = dot
     end
@@ -92,7 +91,6 @@ function VoidFrame:UpdateDotProgress(stacks)
 
             -- 发光效果
             dot.glow:SetGradient("VERTICAL", topColor, bottomColor)
-            dot.glow:SetAlpha(0.2)
             dot.glow:Show()
             dot:SetAlpha(1)
         else
@@ -128,14 +126,9 @@ function VoidFrame:UpdateTotemWeaponStacks()
     local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
 
     if auraData then
-        totemWeapon.currentStacks = auraData.applications or 1
-
-        -- 更新小圆点进度
-        self:UpdateDotProgress(totemWeapon.currentStacks)
-
+        totemWeapon.currentStacks = auraData.applications or 0
         -- 显示框架
         self.dotFrame:Show()
-
     else
         -- 没有buff时隐藏
         totemWeapon.currentStacks = 0
@@ -145,6 +138,8 @@ function VoidFrame:UpdateTotemWeaponStacks()
             self.dotFrame:Hide()
         end
     end
+    -- 更新小圆点进度
+    self:UpdateDotProgress(totemWeapon.currentStacks)
 end
 
 function VoidFrame:TestDisplay()
