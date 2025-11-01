@@ -12,7 +12,7 @@ function VoidFrame:MessageStart(text, playerName, languageName, channelName)
         print("|cFFFF0000开始倒计时|r", num, "|cFFFF0000秒|r")
         C_PartyInfo.DoCountdown(num)
     elseif text == "属性" then
-        self:Void_PlayerInfo()
+        SendChatMessage(self:Void_PlayerInfo(), "WHISPER", nil, playerName)
     end
 end
 
@@ -24,22 +24,25 @@ end
 
 function VoidFrame:Void_PlayerInfo()
     -- 主属性
+    local attribute = math.max(UnitStat("player", 1), UnitStat("player", 2), UnitStat("player", 4))
+
     local health = UnitHealth("player")
-    local power = UnitPower("player", Enum.PowerType.Mana)
+    local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
+    --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
     local crit = GetCritChance()
     local haste = GetHaste()
     local mastery = GetMasteryEffect()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    local first = string.format("|cFCF00FF0基础属性|r\n|cFFFFFF00生命：%d\n法力：%d|r", health, power)
+    local first = string.format("|cFCF00FF0基础属性|r\n|cFFFFFF00主属性：%d\n生命值：%d\n护甲值：%d|r", attribute, health, armor)
     local info = string.format("|cFCF00FF0强化属性|r\n|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
     return string.format("%s\n%s", first, info)
 end
 
 function VoidFrame:Void_CreatePlayerInfoDisplay()
     self.voidPlayerInfoText = UIParent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.voidPlayerInfoText:SetPoint("CENTER", -460, -430)
+    self.voidPlayerInfoText:SetPoint("CENTER", -456, -416)
     self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
     self.voidPlayerInfoText:SetTextScale(1.3)
     self.voidPlayerInfoText:SetShadowColor(1.0, 1.0, 1.0, 0.5)

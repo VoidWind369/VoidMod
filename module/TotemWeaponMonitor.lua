@@ -1,6 +1,7 @@
 local totemWeapon = {
     -- 漩涡武器法术ID
     totemWeapon_spell_id = 344179,
+    galeWinds_spell_id = 454015,
 
     -- 显示设置
     max_stacks = 10,
@@ -18,17 +19,25 @@ function VoidFrame:CreateDotProgress()
     local bar_height = totemWeapon.dot_size + 10
 
     -- 主框架
-    self.dotFrame = CreateFrame("Frame", nil, UIParent)
-    self.dotFrame:SetSize(bar_width, bar_height)
+    self.dotFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+    self.dotFrame:SetSize(bar_width + totemWeapon.dot_spacing + 12, bar_height + totemWeapon.dot_spacing)
     self.dotFrame:SetPoint("CENTER", totemWeapon.position_x, totemWeapon.position_y)
     self.dotFrame:SetFrameStrata("HIGH")
+    self.dotFrame:SetBackdrop({
+        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        edgeSize = 12,
+        insets = { left = 6, right = 6, top = 6, bottom = 6 },
+    })
+    self.dotFrame:SetBackdropColor(0, 0, 0, 0.15)
+    self.dotFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
 
     -- 背景条
     self.dotFrame.background = self.dotFrame:CreateTexture(nil, "BACKGROUND")
-    self.dotFrame.background:SetSize(bar_width + totemWeapon.dot_spacing, bar_height + totemWeapon.dot_spacing)
+    self.dotFrame.background:SetSize(bar_width + totemWeapon.dot_spacing + 12, bar_height + totemWeapon.dot_spacing)
     self.dotFrame.background:SetPoint("CENTER")
-    self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
-    self.dotFrame.background:SetTexture(130937)
+
+    --self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
     self.dotFrame.background:SetGradient("VERTICAL",
             CreateColor(0, 0, 0, 0.15),
             CreateColor(0.2, 0.2, 0.2, 0.2)
@@ -40,7 +49,7 @@ function VoidFrame:CreateDotProgress()
     for i = 1, totemWeapon.max_stacks do
         local dot = CreateFrame("Frame", nil, self.dotFrame)
         dot:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
-        dot:SetPoint("LEFT", (i - 1) * (totemWeapon.dot_size + totemWeapon.dot_spacing) + (totemWeapon.dot_spacing / 2), 0)
+        dot:SetPoint("LEFT", (i - 1) * (totemWeapon.dot_size + totemWeapon.dot_spacing) + (totemWeapon.dot_spacing / 2) + 6, 0)
 
         -- 发光效果
         dot.glow = dot:CreateTexture(nil, "BACKGROUND")
@@ -79,6 +88,18 @@ function VoidFrame:CreateDotProgress()
     end
 end
 
+-- 设定狂风怒号颜色
+function VoidFrame:UpdateDotFrameProgress(hasGaleWindsData)
+    if hasGaleWindsData then
+        self.dotFrame:SetBackdropColor(0, 0.4, 1, 0.55)
+        self.dotFrame:SetBackdropBorderColor(0, 0.1, 0.4, 0.8)
+    else
+        self.dotFrame:SetBackdropColor(0, 0, 0, 0.15)
+        self.dotFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
+    end
+end
+
+-- 设定漩涡武器层数颜色
 function VoidFrame:UpdateDotProgress(stacks)
     local alpha = 1
     for i = 1, totemWeapon.max_stacks do
@@ -122,8 +143,10 @@ function VoidFrame:GetGradientColors(dotIndex, alpha)
     end
 end
 
+-- buff监控进程
 function VoidFrame:UpdateTotemWeaponStacks()
-    local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
+    local totemWeaponData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
+    local galeWindsData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.galeWinds_spell_id)
 
     -- 判断是否增强萨满
     local specID = GetSpecializationInfo(GetSpecialization())
@@ -133,8 +156,8 @@ function VoidFrame:UpdateTotemWeaponStacks()
         self.dotFrame:Hide()
     end
 
-    if auraData then
-        totemWeapon.currentStacks = auraData.applications or 0
+    if totemWeaponData then
+        totemWeapon.currentStacks = totemWeaponData.applications or 0
     else
         totemWeapon.currentStacks = 0
         totemWeapon.lastStacks = 0
@@ -142,6 +165,11 @@ function VoidFrame:UpdateTotemWeaponStacks()
 
     -- 更新小圆点进度
     self:UpdateDotProgress(totemWeapon.currentStacks)
+    if galeWindsData then
+        self:UpdateDotFrameProgress(true)
+    else
+        self:UpdateDotFrameProgress(false)
+    end
 end
 
 function VoidFrame:TestDisplay()
