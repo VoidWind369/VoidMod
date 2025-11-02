@@ -14,6 +14,7 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         if unit == "player" then
             self:CheckBloodlust()
             self:UpdateTotemWeaponStacks()
+            self:UpdateDeathKnightBuff()
             self:Void_UpdatePlayerInfoDisplay()
         end
     elseif event == "CHAT_MSG_WHISPER" then
@@ -26,9 +27,17 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function VoidFrame:Initialize()
+    -- 调试打印区域
+    print("专精" .. GetSpecializationInfo(GetSpecialization()))
+
     self:ClientInfo()
-    -- 创建小圆点显示框架
-    self:CreateDotProgress()
+    -- 创建漩涡武器框架
+    self:CreateDotProgress(10, 263)
+
+    -- 创建骨盾框架
+    self:CreateBoneShieldDotProgress(12, 250)
+
+    -- 创建属性显示框架
     self:Void_CreatePlayerInfoDisplay()
 
     -- 注册斜杠命令
