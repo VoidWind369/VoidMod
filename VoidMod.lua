@@ -30,12 +30,14 @@ function VoidFrame:Initialize()
     -- 调试打印区域
     print("专精" .. GetSpecializationInfo(GetSpecialization()))
 
+    -- WOW客户端信息
     self:ClientInfo()
+
     -- 创建漩涡武器框架
-    self:CreateDotProgress(10, 263)
+    self:CreateDotProgress()
 
     -- 创建骨盾框架
-    self:CreateBoneShieldDotProgress(12, 250)
+    self:CreateBoneShieldDotProgress()
 
     -- 创建属性显示框架
     self:Void_CreatePlayerInfoDisplay()

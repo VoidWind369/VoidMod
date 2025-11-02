@@ -1,6 +1,8 @@
 local totemWeapon = {
+    EnhancementShaman_SpecId = 263,
+
     -- 漩涡武器法术ID
-    totemWeapon_spell_id = 344179,
+    spell_id = 344179,
     galeWinds_spell_id = 454015,
 
     -- 显示设置
@@ -14,8 +16,8 @@ local totemWeapon = {
     lastStacks = 0,
 }
 
-function VoidFrame:CreateDotProgress(max_stacks, specID)
-    local bar_width = (totemWeapon.dot_size + totemWeapon.dot_spacing) * max_stacks
+function VoidFrame:CreateDotProgress()
+    local bar_width = (totemWeapon.dot_size + totemWeapon.dot_spacing) * totemWeapon.max_stacks
     local bar_height = totemWeapon.dot_size + 10
 
     -- 主框架
@@ -46,7 +48,7 @@ function VoidFrame:CreateDotProgress(max_stacks, specID)
     -- 创建10个小圆点
     self.dots = {}
 
-    for i = 1, max_stacks do
+    for i = 1, totemWeapon.max_stacks do
         local dot = CreateFrame("Frame", nil, self.dotFrame)
         dot:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
         dot:SetPoint("LEFT", (i - 1) * (totemWeapon.dot_size + totemWeapon.dot_spacing) + (totemWeapon.dot_spacing / 2) + 6, 0)
@@ -82,7 +84,7 @@ function VoidFrame:CreateDotProgress(max_stacks, specID)
     end
 
     -- 不是增强初始隐藏
-    if GetSpecializationInfo(GetSpecialization()) ~= specID then
+    if GetSpecializationInfo(GetSpecialization()) ~= totemWeapon.EnhancementShaman_SpecId then
         self.dotFrame:Hide()
     end
 end
@@ -144,11 +146,11 @@ end
 
 -- 增强萨buff监控进程
 function VoidFrame:UpdateTotemWeaponStacks()
-    local totemWeaponData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.totemWeapon_spell_id)
+    local totemWeaponData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.spell_id)
     local galeWindsData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.galeWinds_spell_id)
 
     -- 判断是否增强萨满
-    if GetSpecializationInfo(GetSpecialization()) == 263 then
+    if GetSpecializationInfo(GetSpecialization()) == totemWeapon.EnhancementShaman_SpecId then
         self.dotFrame:Show()
     else
         self.dotFrame:Hide()

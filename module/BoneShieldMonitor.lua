@@ -1,6 +1,8 @@
 local boneShield = {
+    BloodDeathKnight_SpecId = 250,
+
     -- 骨盾法术ID
-    boneShield_spell_id = 195181,
+    spell_id = 195181,
 
     -- 显示设置
     max_stacks = 12,
@@ -13,8 +15,8 @@ local boneShield = {
     lastStacks = 0,
 }
 
-function VoidFrame:CreateBoneShieldDotProgress(max_stacks, specID)
-    local bar_width = (boneShield.dot_size + boneShield.dot_spacing) * max_stacks
+function VoidFrame:CreateBoneShieldDotProgress()
+    local bar_width = (boneShield.dot_size + boneShield.dot_spacing) * boneShield.max_stacks
     local bar_height = boneShield.dot_size + 10
 
     -- 主框架
@@ -45,7 +47,7 @@ function VoidFrame:CreateBoneShieldDotProgress(max_stacks, specID)
     -- 创建10个小圆点
     self.dots = {}
 
-    for i = 1, max_stacks do
+    for i = 1, boneShield.max_stacks do
         local dot = CreateFrame("Frame", nil, self.dotFrame)
         dot:SetSize(boneShield.dot_size, boneShield.dot_size)
         dot:SetPoint("LEFT", (i - 1) * (boneShield.dot_size + boneShield.dot_spacing) + (boneShield.dot_spacing / 2) + 6, 0)
@@ -77,7 +79,7 @@ function VoidFrame:CreateBoneShieldDotProgress(max_stacks, specID)
     end
 
     -- 不是血dk初始隐藏
-    if GetSpecializationInfo(GetSpecialization()) ~= specID then
+    if GetSpecializationInfo(GetSpecialization()) ~= boneShield.BloodDeathKnight_SpecId then
         self.dotFrame:Hide()
     end
 end
@@ -127,9 +129,9 @@ function VoidFrame:GetDeathKnightGradientColors(dotIndex, alpha)
 end
 
 function VoidFrame:UpdateDeathKnightBuff()
-    local boneShieldData = C_UnitAuras.GetUnitAuraBySpellID("player", 195181)
+    local boneShieldData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.spell_id)
 
-    if GetSpecializationInfo(GetSpecialization()) == 250 then
+    if GetSpecializationInfo(GetSpecialization()) == boneShield.BloodDeathKnight_SpecId then
         self.dotFrame:Show()
     else
         self.dotFrame:Hide()
