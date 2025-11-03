@@ -37,19 +37,57 @@ function VoidFrame:Void_PlayerInfo()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
     local first = string.format("|cFCF00FF0基础属性|r\n|cFFFFFF00主属性：%d\n生命值：%d\n护甲值：%d|r", attribute, health, armor)
     local info = string.format("|cFCF00FF0强化属性|r\n|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
-    return string.format("%s\n%s", first, info)
+    return first, info
 end
 
 function VoidFrame:Void_CreatePlayerInfoDisplay()
-    self.voidPlayerInfoText = UIParent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.voidPlayerInfoText:SetPoint("CENTER", -456, -416)
-    self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
-    self.voidPlayerInfoText:SetTextScale(1.3)
-    self.voidPlayerInfoText:SetShadowColor(1.0, 1.0, 1.0, 0.5)
-    self.voidPlayerInfoText:SetSpacing(1.5)
-    self.voidPlayerInfoText:SetJustifyH("LEFT")
+    local first, info = VoidFrame:Void_PlayerInfo()
+    self.voidPlayerInfo = CreateFrame("Frame", "PlayerInfo", UIParent)
+
+    self.voidPlayerInfo_UP = CreateFrame("Frame", "PlayerInfo_UP", self.voidPlayerInfo, "BackdropTemplate")
+    self.voidPlayerInfo_UP:SetSize(200, 110)
+    self.voidPlayerInfo_UP:SetPoint("CENTER", -456, -361)
+    self.voidPlayerInfo_UP:SetFrameStrata("HIGH")
+    self.voidPlayerInfo_UP:SetBackdrop({
+        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        edgeSize = 12,
+        insets = { left = 6, right = 6, top = 6, bottom = 6 },
+    })
+    self.voidPlayerInfo_UP:SetBackdropColor(0, 0, 0, 0.15)
+    self.voidPlayerInfo_UP:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
+
+    self.voidPlayerInfo_DOWN = CreateFrame("Frame", "PlayerInfo_DOWN", self.voidPlayerInfo, "BackdropTemplate")
+    self.voidPlayerInfo_DOWN:SetSize(200, 110)
+    self.voidPlayerInfo_DOWN:SetPoint("CENTER", -456, -471)
+    self.voidPlayerInfo_DOWN:SetFrameStrata("HIGH")
+    self.voidPlayerInfo_DOWN:SetBackdrop({
+        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        edgeSize = 12,
+        insets = { left = 6, right = 6, top = 6, bottom = 6 },
+    })
+    self.voidPlayerInfo_DOWN:SetBackdropColor(0, 0, 0, 0.15)
+    self.voidPlayerInfo_DOWN:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
+
+    self.voidPlayerInfoText_UP = self.voidPlayerInfo_UP:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.voidPlayerInfoText_DOWN = self.voidPlayerInfo_UP:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+
+    AddString(self.voidPlayerInfoText_UP, first)
+    AddString(self.voidPlayerInfoText_DOWN, info)
+end
+
+function AddString(fontString, string)
+    fontString:SetPoint("CENTER", 0, 0)
+    fontString:SetText(string)
+    fontString:SetTextScale(1.3)
+    fontString:SetShadowColor(1.0, 1.0, 1.0, 0.5)
+    fontString:SetSpacing(1.5)
+    fontString:SetJustifyH("LEFT")
 end
 
 function VoidFrame:Void_UpdatePlayerInfoDisplay()
-    self.voidPlayerInfoText:SetText(VoidFrame:Void_PlayerInfo())
+    local first, info = VoidFrame:Void_PlayerInfo()
+    self.voidPlayerInfoText_UP:SetText(first)
+    self.voidPlayerInfoText_UP:SetText(info)
 end
