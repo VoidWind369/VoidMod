@@ -9,3 +9,4 @@ module\BloodlustSimple.lua
 module\BoneShieldMonitor.lua
 module\TotemWeaponMonitor.lua
 module\MessageBot.lua
+module\ButtonAuto.lua

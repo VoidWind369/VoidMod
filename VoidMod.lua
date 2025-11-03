@@ -5,6 +5,9 @@ VoidFrame:RegisterEvent("UNIT_AURA")
 VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")
 VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST")
 VoidFrame:RegisterEvent("UNIT_COMBAT")
+VoidFrame:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
+VoidFrame:RegisterEvent("GROUP_INVITE_CONFIRMATION")
+VoidFrame:RegisterEvent("LFG_ROLE_CHECK_SHOW")
 
 VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
@@ -19,10 +22,13 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         end
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
-    elseif event == "PARTY_INVITE_REQUEST" then
+    elseif event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then
         self:PartyStart(...)
     elseif event == "UNIT_COMBAT" then
         self:Void_UpdatePlayerInfoDisplay()
+    elseif event == "LFG_ROLE_CHECK_SHOW" then
+        print("排本")
+        C_Timer.After(0.1, function() LFDRoleCheckPopupAcceptButton:Click() end)
     end
 end)
 
