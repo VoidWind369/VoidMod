@@ -56,7 +56,6 @@ end
 
 -- 设定漩涡武器层数颜色
 function VoidFrame:UpdateDotProgress(stacks)
-    print(stacks)
     local alpha = 1
     for i = 1, totemWeapon.max_stacks do
         local dot = self.totemWeaponDots[i]
