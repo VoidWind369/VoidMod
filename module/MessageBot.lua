@@ -23,8 +23,18 @@ function VoidFrame:PartyStart(name, isTank, isHealer, isDamage, isNativeRealm, a
 end
 
 function VoidFrame:Void_PlayerInfo()
+    local specID, name, description, icon, role, primaryStat = GetSpecializationInfo(GetSpecialization())
     -- 主属性
-    local attribute = math.max(UnitStat("player", 1), UnitStat("player", 2), UnitStat("player", 4))
+    local attribute = UnitStat("player", primaryStat)
+
+    local primaryStatName = "主属性"
+    if primaryStat == 1 then
+        primaryStatName = "力量"
+    elseif primaryStat == 2 then
+        primaryStatName = "敏捷"
+    elseif primaryStat == 4 then
+        primaryStatName = "智力"
+    end
 
     local health = UnitHealth("player")
     local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
@@ -38,23 +48,13 @@ function VoidFrame:Void_PlayerInfo()
     local haste = GetHaste()
     local mastery = GetMasteryEffect()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    local first = string.format("|cFFFFFF00生命值：%d\n主属性：%d\n护甲值：%d\n移动速度：%d%%|r", health, attribute, armor, speedPercent)
+    local first = string.format("|cFFFFFF00生命：%d\n%s：%d\n护甲：%d\n移速：%d%%|r", health, primaryStatName, attribute, armor, speedPercent)
     local info = string.format("|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
     return first, info
 end
 
 function VoidFrame:Void_CreatePlayerInfoDisplay()
     local first, info = VoidFrame:Void_PlayerInfo()
-    --self.voidPlayerInfo = CreateFrame("Frame", "PlayerInfo", UIParent, "BackdropTemplate")
-    --self.voidPlayerInfo:SetPoint("CENTER", 0, 0)
-    --
-    --self.voidPlayerInfo:SetSize(200, 110)
-    --self.voidPlayerInfo:SetPoint("CENTER", -456, -361)
-    --SetPlayerInfoFrameStyle(self.voidPlayerInfo)
-    --
-    --self.voidPlayerInfoText = self.voidPlayerInfo:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    --
-    --AddString(self.voidPlayerInfoText, first)
     self:Void_CreatePlayerInfoDisplay_UP(first)
     self:Void_CreatePlayerInfoDisplay_Down(info)
 end
