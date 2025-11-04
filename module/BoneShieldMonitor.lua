@@ -3,6 +3,7 @@ local boneShield = {
 
     -- 骨盾法术ID
     spell_id = 195181,
+    ruin_spell_id = 441416,
 
     -- 显示设置
     max_stacks = 12,
@@ -17,14 +18,14 @@ local boneShield = {
 
 function VoidFrame:CreateBoneShieldDotProgress()
     -- 主框架
-    self.dotFrame = CreateFrame("Frame", "BoneShield", UIParent, "BackdropTemplate")
-    WhiteTransparentFrame(self.dotFrame, boneShield)
+    self.dotFrameDeathKnight = CreateFrame("Frame", "BoneShield", UIParent, "BackdropTemplate")
+    WhiteTransparentFrame(self.dotFrameDeathKnight, boneShield)
 
     -- 创建10个小圆点
     self.boneShieldDots = {}
 
     for i = 1, boneShield.max_stacks do
-        local boneShieldDot = CreateFrame("Frame", nil, self.dotFrame)
+        local boneShieldDot = CreateFrame("Frame", nil, self.dotFrameDeathKnight)
         WhiteTransparentDot(i, boneShieldDot, boneShield)
 
         boneShieldDot.glow = boneShieldDot:CreateTexture(nil, "BACKGROUND")
@@ -38,7 +39,17 @@ function VoidFrame:CreateBoneShieldDotProgress()
 
     -- 不是血dk初始隐藏
     if GetSpecializationInfo(GetSpecialization()) ~= boneShield.BloodDeathKnight_SpecId then
-        self.dotFrame:Hide()
+        self.dotFrameDeathKnight:Hide()
+    end
+end
+
+function VoidFrame:UpdateDeathKnightDotFrameProgress(hasGaleWindsData)
+    if hasGaleWindsData then
+        self.dotFrameDeathKnight:SetBackdropColor(0, 0.4, 1, 0.55)
+        self.dotFrameDeathKnight:SetBackdropBorderColor(0, 0.1, 0.4, 0.8)
+    else
+        self.dotFrameDeathKnight:SetBackdropColor(0, 0, 0, 0.15)
+        self.dotFrameDeathKnight:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
     end
 end
 
@@ -88,6 +99,7 @@ end
 
 function VoidFrame:UpdateDeathKnightBuff()
     local boneShieldData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.spell_id)
+    local ruinData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.ruin_spell_id)
 
     if GetSpecializationInfo(GetSpecialization()) == boneShield.BloodDeathKnight_SpecId then
         self.dotFrame:Show()
@@ -104,4 +116,9 @@ function VoidFrame:UpdateDeathKnightBuff()
 
     -- 更新小圆点进度
     self:UpdateDeathKnightDotProgress(boneShield.currentStacks)
+    if ruinData then
+        self:UpdateDeathKnightDotFrameProgress(true)
+    else
+        self:UpdateDeathKnightDotFrameProgress(false)
+    end
 end
