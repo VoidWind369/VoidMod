@@ -28,6 +28,9 @@ function VoidFrame:Void_PlayerInfo()
 
     local health = UnitHealth("player")
     local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
+
+    local baseSpeed, currentSpeed, playerSpeedMod = GetUnitSpeed("player")
+    local speedPercent = (currentSpeed / 7) * 100  -- 7是基础奔跑速度
     --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
@@ -35,7 +38,7 @@ function VoidFrame:Void_PlayerInfo()
     local haste = GetHaste()
     local mastery = GetMasteryEffect()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    local first = string.format("|cFFFFFF00生命值：%d\n主属性：%d\n护甲值：%d|r", health, attribute, armor)
+    local first = string.format("|cFFFFFF00生命值：%d\n主属性：%d\n护甲值：%d\n移动速度：%d%%|r", health, attribute, armor, speedPercent)
     local info = string.format("|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
     return first, info
 end
@@ -58,8 +61,8 @@ end
 
 function VoidFrame:Void_CreatePlayerInfoDisplay_UP(first)
     self.voidPlayerInfo_UP = CreateFrame("Frame", "PlayerInfo_UP", UIParent, "BackdropTemplate")
-    self.voidPlayerInfo_UP:SetSize(170, 90)
-    self.voidPlayerInfo_UP:SetPoint("CENTER", -456, -361)
+    self.voidPlayerInfo_UP:SetSize(170, 100)
+    self.voidPlayerInfo_UP:SetPoint("CENTER", -456, -365)
     SetPlayerInfoFrameStyle(self.voidPlayerInfo_UP)
 
     self.voidPlayerInfoText_UP = self.voidPlayerInfo_UP:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -69,8 +72,8 @@ end
 
 function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
     self.voidPlayerInfo_DOWN = CreateFrame("Frame", "PlayerInfo_DOWN", UIParent, "BackdropTemplate")
-    self.voidPlayerInfo_DOWN:SetSize(170, 110)
-    self.voidPlayerInfo_DOWN:SetPoint("CENTER", -456, -465)
+    self.voidPlayerInfo_DOWN:SetSize(170, 100)
+    self.voidPlayerInfo_DOWN:SetPoint("CENTER", -456, -470)
     SetPlayerInfoFrameStyle(self.voidPlayerInfo_DOWN)
 
     self.voidPlayerInfoText_DOWN = self.voidPlayerInfo_DOWN:CreateFontString(nil, "OVERLAY", "GameFontNormal")
