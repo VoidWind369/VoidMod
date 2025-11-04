@@ -102,9 +102,9 @@ function VoidFrame:UpdateDeathKnightBuff()
     local ruinData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.ruin_spell_id)
 
     if GetSpecializationInfo(GetSpecialization()) == boneShield.BloodDeathKnight_SpecId then
-        self.dotFrame:Show()
+        self.dotFrameDeathKnight:Show()
     else
-        self.dotFrame:Hide()
+        self.dotFrameDeathKnight:Hide()
     end
 
     if boneShieldData then
