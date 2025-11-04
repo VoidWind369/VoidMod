@@ -18,8 +18,8 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
             self:CheckBloodlust()
             self:UpdateDeathKnightBuff()
             self:UpdateTotemWeaponStacks()
-            self:Void_UpdatePlayerInfoDisplay()
         end
+        self:Void_UpdatePlayerInfoDisplay()
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
     elseif event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then

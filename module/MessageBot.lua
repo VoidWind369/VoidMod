@@ -48,7 +48,7 @@ function VoidFrame:Void_PlayerInfo()
     local haste = GetHaste()
     local mastery = GetMasteryEffect()
     local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    local first = string.format("|cFFFFFF00生命：%d\n%s：%d\n护甲：%d\n移速：%d%%|r", health, primaryStatName, attribute, armor, speedPercent)
+    local first = string.format("|cFFFFFF00生命：%d\n%s：%d\n护甲：%d\n移速：%.2f%%|r", health, primaryStatName, attribute, armor, speedPercent)
     local info = string.format("|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery, versatility)
     return first, info
 end
