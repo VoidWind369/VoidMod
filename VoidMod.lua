@@ -16,8 +16,8 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         local unit = ...
         if unit == "player" then
             self:CheckBloodlust()
-            self:UpdateTotemWeaponStacks()
             self:UpdateDeathKnightBuff()
+            self:UpdateTotemWeaponStacks()
             self:Void_UpdatePlayerInfoDisplay()
         end
     elseif event == "CHAT_MSG_WHISPER" then
@@ -39,11 +39,11 @@ function VoidFrame:Initialize()
     -- WOW客户端信息
     self:ClientInfo()
 
+    -- 创建骨盾框架
+    self:CreateBoneShieldDotProgress()
     -- 创建漩涡武器框架
     self:CreateDotProgress()
 
-    -- 创建骨盾框架
-    self:CreateBoneShieldDotProgress()
 
     -- 创建属性显示框架
     self:Void_CreatePlayerInfoDisplay()

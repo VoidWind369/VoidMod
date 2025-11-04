@@ -17,70 +17,24 @@ local totemWeapon = {
 }
 
 function VoidFrame:CreateDotProgress()
-    local bar_width = (totemWeapon.dot_size + totemWeapon.dot_spacing) * totemWeapon.max_stacks
-    local bar_height = totemWeapon.dot_size + 10
-
     -- 主框架
-    self.dotFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
-    self.dotFrame:SetSize(bar_width + totemWeapon.dot_spacing + 12, bar_height + totemWeapon.dot_spacing)
-    self.dotFrame:SetPoint("CENTER", totemWeapon.position_x, totemWeapon.position_y)
-    self.dotFrame:SetFrameStrata("HIGH")
-    self.dotFrame:SetBackdrop({
-        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-        edgeSize = 12,
-        insets = { left = 6, right = 6, top = 6, bottom = 6 },
-    })
-    self.dotFrame:SetBackdropColor(0, 0, 0, 0.15)
-    self.dotFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
-
-    -- 背景条
-    self.dotFrame.background = self.dotFrame:CreateTexture(nil, "BACKGROUND")
-    self.dotFrame.background:SetSize(bar_width + totemWeapon.dot_spacing + 12, bar_height + totemWeapon.dot_spacing)
-    self.dotFrame.background:SetPoint("CENTER")
-
-    --self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
-    self.dotFrame.background:SetGradient("VERTICAL",
-            CreateColor(0, 0, 0, 0.15),
-            CreateColor(0.2, 0.2, 0.2, 0.2)
-    )
+    self.dotFrame = CreateFrame("Frame", "TotemWeapon", UIParent, "BackdropTemplate")
+    WhiteTransparentFrame(self.dotFrame, totemWeapon)
 
     -- 创建10个小圆点
-    self.dots = {}
+    self.totemWeaponDots = {}
 
     for i = 1, totemWeapon.max_stacks do
         local dot = CreateFrame("Frame", nil, self.dotFrame)
-        dot:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
-        dot:SetPoint("LEFT", (i - 1) * (totemWeapon.dot_size + totemWeapon.dot_spacing) + (totemWeapon.dot_spacing / 2) + 6, 0)
+        WhiteTransparentDot(i, dot, totemWeapon)
 
-        -- 发光效果
         dot.glow = dot:CreateTexture(nil, "BACKGROUND")
-        dot.glow:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
-        dot.glow:SetAlpha(0.2)
-        dot.glow:SetPoint("CENTER")
-        dot.glow:SetBlendMode("ADD")
-        dot.glow:Hide()
+        WhiteTransparentDotGlow(dot.glow, totemWeapon)
 
-        -- 小圆点纹理 - 使用白色纹理然后通过渐变上色
         dot.tex = dot:CreateTexture(nil, "OVERLAY")
-        dot.tex:SetSize(totemWeapon.dot_size, totemWeapon.dot_size)
-        dot.tex:SetPoint("CENTER")
+        WhiteTransparentDotTex(dot.tex, totemWeapon)
 
-        -- 关键：使用白色方形纹理，渐变会覆盖颜色
-        --dot.tex:SetTexture("Interface\\Buttons\\WHITE8x8")
-        --dot.glow:SetTexture("Interface\\Buttons\\WHITE8x8")
-
-        dot.tex:SetTexture(518448)
-        dot.glow:SetTexture(518448)
-
-        -- 初始状态
-        dot.tex:SetGradient("VERTICAL",
-                CreateColor(0.5, 0.5, 0.5, 1),
-                CreateColor(0.2, 0.2, 0.2, 1)
-        )
-        dot:SetAlpha(0.3)
-
-        self.dots[i] = dot
+        self.totemWeaponDots[i] = dot
     end
 
     -- 不是增强初始隐藏
@@ -102,13 +56,14 @@ end
 
 -- 设定漩涡武器层数颜色
 function VoidFrame:UpdateDotProgress(stacks)
+    print(stacks)
     local alpha = 1
     for i = 1, totemWeapon.max_stacks do
-        local dot = self.dots[i]
+        local dot = self.totemWeaponDots[i]
 
         if i <= stacks then
             -- 激活的小圆点 - 饱满的纵向渐变
-            local topColor, bottomColor = self:GetGradientColors(i, alpha)
+            local topColor, bottomColor = self:GetGradientColorsSM(i, alpha)
             dot.tex:SetGradient("VERTICAL", topColor, bottomColor)
 
             -- 发光效果
@@ -127,7 +82,7 @@ function VoidFrame:UpdateDotProgress(stacks)
     end
 end
 
-function VoidFrame:GetGradientColors(dotIndex, alpha)
+function VoidFrame:GetGradientColorsSM(dotIndex, alpha)
     -- 饱满的金属渐变色
     if dotIndex <= 4 then
         -- 蓝色金属

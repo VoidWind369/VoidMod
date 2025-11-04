@@ -5,8 +5,9 @@
 ## Version: 1.0
 
 VoidMod.lua
+commend\Background.lua
+module\TotemWeaponMonitor.lua
 module\BloodlustSimple.lua
 module\BoneShieldMonitor.lua
-module\TotemWeaponMonitor.lua
 module\MessageBot.lua
 module\ButtonAuto.lua

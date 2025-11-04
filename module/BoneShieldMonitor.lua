@@ -16,66 +16,24 @@ local boneShield = {
 }
 
 function VoidFrame:CreateBoneShieldDotProgress()
-    local bar_width = (boneShield.dot_size + boneShield.dot_spacing) * boneShield.max_stacks
-    local bar_height = boneShield.dot_size + 10
-
     -- 主框架
-    self.dotFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
-    self.dotFrame:SetSize(bar_width + boneShield.dot_spacing + 12, bar_height + boneShield.dot_spacing)
-    self.dotFrame:SetPoint("CENTER", boneShield.position_x, boneShield.position_y)
-    self.dotFrame:SetFrameStrata("HIGH")
-    self.dotFrame:SetBackdrop({
-        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-        edgeSize = 12,
-        insets = { left = 6, right = 6, top = 6, bottom = 6 },
-    })
-    self.dotFrame:SetBackdropColor(0, 0, 0, 0.15)
-    self.dotFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
-
-    -- 背景条
-    self.dotFrame.background = self.dotFrame:CreateTexture(nil, "BACKGROUND")
-    self.dotFrame.background:SetSize(bar_width + boneShield.dot_spacing + 12, bar_height + boneShield.dot_spacing)
-    self.dotFrame.background:SetPoint("CENTER")
-
-    --self.dotFrame.background:SetColorTexture(0, 0, 0, 0.3)
-    self.dotFrame.background:SetGradient("VERTICAL",
-            CreateColor(0, 0, 0, 0.15),
-            CreateColor(0.2, 0.2, 0.2, 0.2)
-    )
+    self.dotFrame = CreateFrame("Frame", "BoneShield", UIParent, "BackdropTemplate")
+    WhiteTransparentFrame(self.dotFrame, boneShield)
 
     -- 创建10个小圆点
-    self.dots = {}
+    self.boneShieldDots = {}
 
     for i = 1, boneShield.max_stacks do
-        local dot = CreateFrame("Frame", nil, self.dotFrame)
-        dot:SetSize(boneShield.dot_size, boneShield.dot_size)
-        dot:SetPoint("LEFT", (i - 1) * (boneShield.dot_size + boneShield.dot_spacing) + (boneShield.dot_spacing / 2) + 6, 0)
+        local boneShieldDot = CreateFrame("Frame", nil, self.dotFrame)
+        WhiteTransparentDot(i, boneShieldDot, boneShield)
 
-        -- 发光效果
-        dot.glow = dot:CreateTexture(nil, "BACKGROUND")
-        dot.glow:SetSize(boneShield.dot_size, boneShield.dot_size)
-        dot.glow:SetAlpha(0.2)
-        dot.glow:SetPoint("CENTER")
-        dot.glow:SetBlendMode("ADD")
-        dot.glow:Hide()
+        boneShieldDot.glow = boneShieldDot:CreateTexture(nil, "BACKGROUND")
+        WhiteTransparentDotGlow(boneShieldDot.glow, boneShield)
 
-        -- 小圆点纹理 - 使用白色纹理然后通过渐变上色
-        dot.tex = dot:CreateTexture(nil, "OVERLAY")
-        dot.tex:SetSize(boneShield.dot_size, boneShield.dot_size)
-        dot.tex:SetPoint("CENTER")
+        boneShieldDot.tex = boneShieldDot:CreateTexture(nil, "OVERLAY")
+        WhiteTransparentDotTex(boneShieldDot.tex, boneShield)
 
-        dot.tex:SetTexture(518448)
-        dot.glow:SetTexture(518448)
-
-        -- 初始状态
-        dot.tex:SetGradient("VERTICAL",
-                CreateColor(0.5, 0.5, 0.5, 1),
-                CreateColor(0.2, 0.2, 0.2, 1)
-        )
-        dot:SetAlpha(0.3)
-
-        self.dots[i] = dot
+        self.boneShieldDots[i] = boneShieldDot
     end
 
     -- 不是血dk初始隐藏
@@ -88,7 +46,7 @@ end
 function VoidFrame:UpdateDeathKnightDotProgress(stacks)
     local alpha = 1
     for i = 1, boneShield.max_stacks do
-        local dot = self.dots[i]
+        local dot = self.boneShieldDots[i]
 
         if i <= stacks then
             -- 激活的小圆点 - 饱满的纵向渐变
