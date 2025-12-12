@@ -1,4 +1,4 @@
-## Interface: 110205
+## Interface: 110207
 ## Title: VoidMod
 ## Notes: Mzx插件整合
 ## Author: Muzixi
