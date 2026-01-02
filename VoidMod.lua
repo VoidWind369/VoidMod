@@ -36,6 +36,10 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function VoidFrame:Initialize()
+    -- 加载数据库
+    VoidModDB = VoidModDB or {}
+    VoidModCharacterDB = VoidModCharacterDB or {}
+
     -- 调试打印区域
     print("专精" .. GetSpecializationInfo(GetSpecialization()))
 

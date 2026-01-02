@@ -3,9 +3,12 @@
 ## Notes: Mzx插件整合
 ## Author: Muzixi
 ## Version: 1.0
+## SavedVariables: VoidModDB
+## SavedVariablesPerCharacter: VoidModCharacterDB
 
 VoidMod.lua
 commend\Background.lua
+commend\Movable.lua
 module\TotemWeaponMonitor.lua
 module\BloodlustSimple.lua
 module\BoneShieldMonitor.lua
