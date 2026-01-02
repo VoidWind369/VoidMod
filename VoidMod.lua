@@ -23,7 +23,10 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
     elseif event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then
-        self:PartyStart(...)
+        local unit = ...
+        if unit ~= nil then
+            self:PartyStart(...)
+        end
     elseif event == "UNIT_COMBAT" then
         self:Void_UpdatePlayerInfoDisplay()
     elseif event == "LFG_ROLE_CHECK_SHOW" then
