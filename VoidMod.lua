@@ -16,10 +16,10 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         local unit = ...
         if unit == "player" then
             self:CheckBloodlust()
-            self:UpdateDeathKnightBuff()
+            -- self:UpdateDeathKnightBuff()
             self:UpdateTotemWeaponStacks()
         end
-        self:Void_UpdatePlayerInfoDisplay()
+        -- self:Void_UpdatePlayerInfoDisplay()
     elseif event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
     elseif event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then
@@ -35,10 +35,13 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     end
 end)
 
+VoidFrame:SetScript("OnUpdate", function(self, delta)
+    self:Void_UpdatePlayerInfoDisplay()
+end)
+
 function VoidFrame:Initialize()
     -- 加载数据库
-    VoidModDB = VoidModDB or {}
-    VoidModCharacterDB = VoidModCharacterDB or {}
+    InitDatabase()
 
     -- 调试打印区域
     print("专精" .. GetSpecializationInfo(GetSpecialization()))
@@ -47,7 +50,7 @@ function VoidFrame:Initialize()
     self:ClientInfo()
 
     -- 创建骨盾框架
-    self:CreateBoneShieldDotProgress()
+    -- self:CreateBoneShieldDotProgress()
     -- 创建漩涡武器框架
     self:CreateDotProgress()
 
@@ -84,6 +87,8 @@ function VoidFrame:HandleSlashCommand(msg)
         self:ToggleScale()
     elseif command == "info" then
         self:Void_PlayerInfo()
+    elseif command == "new" then
+        NewDatabase()
     else
         self:ClientInfo()
         self:PrintHelp()
@@ -92,7 +97,8 @@ end
 
 function VoidFrame:ClientInfo()
     local version, build, date, toc_version = GetBuildInfo()
-    print("|cFF33937FVoidMod|r |cFF69CCF0Client|r |cFF00FF00Info:|r \n » Version: " .. version .. "\n » Build: " .. build .. "\n » Date: " .. date .. "\n » TocVersion: " .. toc_version)
+    print("|cFF33937FVoidMod|r |cFF69CCF0Client|r |cFF00FF00Info:|r \n » Version: " ..
+        version .. "\n » Build: " .. build .. "\n » Date: " .. date .. "\n » TocVersion: " .. toc_version)
 end
 
 function VoidFrame:PrintHelp()

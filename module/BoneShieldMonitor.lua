@@ -2,12 +2,12 @@ local boneShield = {
     BloodDeathKnight_SpecId = 250,
 
     -- 骨盾法术ID
-    spell_id = 195181,
+    spell_id = 433925,
     ruin_spell_id = 441416,
 
     -- 显示设置
     max_stacks = 12,
-    dot_size = 20, -- 每个小圆点的大小
+    dot_size = 20,   -- 每个小圆点的大小
     dot_spacing = 1, -- 圆点间距
     position_x = 0,
     position_y = -260,
@@ -71,8 +71,8 @@ function VoidFrame:UpdateDeathKnightDotProgress(stacks)
         else
             -- 未激活的小圆点 - 深灰色渐变
             dot.tex:SetGradient("VERTICAL",
-                    CreateColor(0.5, 0.5, 0.5, alpha),
-                    CreateColor(0.2, 0.2, 0.2, alpha)
+                CreateColor(0.5, 0.5, 0.5, alpha),
+                CreateColor(0.2, 0.2, 0.2, alpha)
             )
             dot.glow:Hide()
             dot:SetAlpha(0.3)
@@ -98,8 +98,10 @@ function VoidFrame:GetDeathKnightGradientColors(dotIndex, alpha)
 end
 
 function VoidFrame:UpdateDeathKnightBuff()
-    local boneShieldData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.spell_id)
+    local boneShieldData = C_UnitAuras.GetAuraDataBySlot("player", boneShield.spell_id)
     local ruinData = C_UnitAuras.GetUnitAuraBySpellID("player", boneShield.ruin_spell_id)
+
+    -- print("骨盾" .. (boneShieldData.applications or 0) .. ", " .. ruinData.applications)
 
     if GetSpecializationInfo(GetSpecialization()) == boneShield.BloodDeathKnight_SpecId then
         self.dotFrameDeathKnight:Show()
