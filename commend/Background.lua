@@ -22,6 +22,7 @@ function WhiteTransparentDot(i, dot, infos)
     dot:SetAlpha(0.3)
 end
 
+-- 圆圈投影
 function WhiteTransparentDotGlow(dotGlow, infos)
     dotGlow:SetSize(infos.dot_size, infos.dot_size)
     dotGlow:SetAlpha(0.2)
@@ -31,10 +32,12 @@ function WhiteTransparentDotGlow(dotGlow, infos)
     dotGlow:SetTexture(518448)
 end
 
+-- 圆圈
 function WhiteTransparentDotTex(dotTex, infos)
     dotTex:SetSize(infos.dot_size, infos.dot_size)
     dotTex:SetPoint("CENTER")
     dotTex:SetTexture(518448)
+    -- dotTex:SetTexture("Interface/SpellActivationOverlay/IconAlert")
     -- 初始状态
     dotTex:SetGradient("VERTICAL",
         CreateColor(0.5, 0.5, 0.5, 1),

@@ -44,9 +44,6 @@ function VoidFrame:CreateDotProgress()
         local dot = CreateFrame("Frame", nil, self.dotFrame)
         WhiteTransparentDot(i, dot, totemWeapon)
 
-        -- dot.glow = dot:CreateTexture(nil, "BACKGROUND")
-        -- WhiteTransparentDotGlow(dot.glow, totemWeapon)
-
         dot.tex = dot:CreateTexture(nil, "OVERLAY")
         WhiteTransparentDotTex(dot.tex, totemWeapon)
 
@@ -82,7 +79,7 @@ function VoidFrame:UpdateDotProgress(stacks)
 
         if i <= stacks then
             -- 激活的小圆点 - 饱满的纵向渐变
-            -- local topColor, bottomColor = self:GetGradientColorsBlue(alpha)
+            -- dot.tex.SetColorTexture(0.8, 0.9, 1.0, alpha)
             dot.tex:SetGradient("VERTICAL", topColor, bottomColor)
 
             -- 发光效果
@@ -108,19 +105,24 @@ function VoidFrame:GetGradientColorsSM(stacks, alpha)
         return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
     elseif stacks <= 9 then
         -- 金色金属
-        return CreateColor(1.0, 1.0, 0.7, alpha), CreateColor(0.8, 0.6, 0.2, alpha)
+        return CreateColor(1.0, 0.9, 0.5, alpha), CreateColor(1.0, 0.9, 0.5, alpha)
     else
         -- 红色金属
         return CreateColor(1.0, 0.4, 0.4, alpha), CreateColor(1.0, 0.0, 0.0, alpha)
     end
 end
 
-function VoidFrame:GetGradientColorsBlue(alpha)
-    return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
-end
-
-function VoidFrame:GetGradientColorsRed(alpha)
-    return CreateColor(1.0, 0.4, 0.4, alpha), CreateColor(1.0, 0.0, 0.0, alpha)
+function VoidFrame:GetGradientColors(stacks, alpha)
+    if stacks <= 5 then
+        -- 蓝色金属
+        return CreateColor(0.8, 0.9, 1.0, alpha)
+    elseif stacks <= 9 then
+        -- 金色金属
+        return CreateColor(1.0, 0.9, 0.5, alpha)
+    else
+        -- 红色金属
+        return CreateColor(1.0, 0.4, 0.4, alpha)
+    end
 end
 
 -- 增强萨buff监控进程
