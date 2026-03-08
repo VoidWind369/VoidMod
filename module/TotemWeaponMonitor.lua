@@ -7,7 +7,7 @@ local totemWeapon = {
 
     -- 显示设置
     max_stacks = 10,
-    dot_size = 36,   -- 每个小圆点的大小
+    dot_size = 30,   -- 每个小圆点的大小
     dot_spacing = 1, -- 圆点间距
     position_x = 0,
     position_y = -260,
