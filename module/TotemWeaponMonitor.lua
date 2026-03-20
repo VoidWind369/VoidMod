@@ -105,7 +105,7 @@ function VoidFrame:GetGradientColorsSM(stacks, alpha)
         return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
     elseif stacks <= 9 then
         -- 金色金属
-        return CreateColor(1.0, 0.9, 0.5, alpha), CreateColor(1.0, 0.9, 0.5, alpha)
+        return CreateColor(1.0, 0.5, 0.0, alpha), CreateColor(1.0, 0.7, 0.0, alpha)
     else
         -- 红色金属
         return CreateColor(1.0, 0.4, 0.4, alpha), CreateColor(1.0, 0.0, 0.0, alpha)
@@ -130,13 +130,6 @@ function VoidFrame:UpdateTotemWeaponStacks()
     local totemWeaponData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.spell_id)
     local galeWindsData = C_UnitAuras.GetUnitAuraBySpellID("player", totemWeapon.galeWinds_spell_id)
 
-    -- 判断是否增强萨满
-    if GetSpecializationInfo(GetSpecialization()) == totemWeapon.EnhancementShaman_SpecId then
-        self.dotFrame:Show()
-    else
-        self.dotFrame:Hide()
-    end
-
     if totemWeaponData then
         totemWeapon.currentStacks = totemWeaponData.applications or 0
     else
@@ -146,11 +139,11 @@ function VoidFrame:UpdateTotemWeaponStacks()
 
     -- 更新小圆点进度
     self:UpdateDotProgress(totemWeapon.currentStacks)
-    if galeWindsData then
-        self:UpdateDotFrameProgress(true)
-    else
-        self:UpdateDotFrameProgress(false)
-    end
+    -- if galeWindsData then
+    --     self:UpdateDotFrameProgress(true)
+    -- else
+    --     self:UpdateDotFrameProgress(false)
+    -- end
 end
 
 function VoidFrame:TestDisplay()

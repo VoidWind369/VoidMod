@@ -3,16 +3,17 @@ function WhiteTransparentFrame(self, infos)
     local bar_width = (infos.dot_size + infos.dot_spacing) * infos.max_stacks
     local bar_height = infos.dot_size + 10
 
+    local r, g, b, i = 1, 1, 0.9, 2
+
     self:SetSize(bar_width + infos.dot_spacing + 12, bar_height + infos.dot_spacing)
-    self:SetFrameStrata("HIGH")
     self:SetBackdrop({
         bgFile = "Interface/Tooltips/UI-Tooltip-Background",
         edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
         edgeSize = 12,
-        insets = { left = 6, right = 6, top = 6, bottom = 6 },
+        insets = { left = i, right = i, top = i, bottom = i },
     })
-    self:SetBackdropColor(0, 0, 0, 0.3)
-    self:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
+    self:SetBackdropColor(r, g, b, 0.5)
+    self:SetBackdropBorderColor(r, g, b, 0.7)
 end
 
 function WhiteTransparentDot(i, dot, infos)

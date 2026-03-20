@@ -16,8 +16,13 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         local unit = ...
         if unit == "player" then
             self:CheckBloodlust()
-            -- self:UpdateDeathKnightBuff()
-            self:UpdateTotemWeaponStacks()
+            -- 判断是否增强萨满
+            if GetSpecializationInfo(GetSpecialization()) == 263 then
+                self.dotFrame:Show()
+                self:UpdateTotemWeaponStacks()
+            else
+                self.dotFrame:Hide()
+            end
         end
         -- self:Void_UpdatePlayerInfoDisplay()
     elseif event == "CHAT_MSG_WHISPER" then
