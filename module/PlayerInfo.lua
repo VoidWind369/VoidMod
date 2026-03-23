@@ -47,12 +47,15 @@ function VoidFrame:Void_PlayerInfo()
 
     local first_table = {
         name = {
-            "|cFFC41E3A生命|r",
-            "|cFFC41E3A" .. primaryStatName .. "|r",
-            "|cFF3FC7EB护甲|r",
-            "|cFF3FC7EB移速|r",
+            "|cFFFFFF00装等|r",
+            "|cFFFFFF00生命|r",
+            "|cFFFFFF00" .. primaryStatName .. "|r",
+            "|cFFFFFF00护甲|r",
+            "|cFFFFFF00移速|r",
         },
         value = {
+            avgItemLevelEquipped == avgItemLevel and "|cFFFF69B4" .. avgItemLevel .. "|r" or
+            string.format("|cFFFF69B4%.1f|r/%.1f", avgItemLevelEquipped, avgItemLevel),
             health,
             attribute,
             armor,
@@ -61,7 +64,7 @@ function VoidFrame:Void_PlayerInfo()
     }
 
     local last_table = {
-        name = { "|cFFFFFF66暴击|r", "|cFFFF3300急速|r", "|cFF00FF00精通|r", "|cFF00CCFF全能|r" },
+        name = { "|cFF00FF00暴击|r", "|cFF00FF00急速|r", "|cFF00FF00精通|r", "|cFF00FF00全能|r" },
         value = {
             string.format("%6.2f%%", crit),
             string.format("%6.2f%%", haste),
@@ -79,7 +82,7 @@ function SetPlayerInfoFrameStyle(frame)
         edgeSize = 12,
         insets = { left = 6, right = 6, top = 6, bottom = 6 },
     })
-    frame:SetBackdropColor(0, 0, 0, 0.15)
+    frame:SetBackdropColor(0, 0, 0, 0.3)
     frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
 end
 
@@ -102,7 +105,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_UP(first)
     }
 
     self.voidPlayerInfo_UP = CreateFrame("Frame", "PlayerInfo_UP", UIParent, "BackdropTemplate")
-    self.voidPlayerInfo_UP:SetSize(170, 100)
+    self.voidPlayerInfo_UP:SetSize(170, 110)
     self.voidPlayerInfo_UP:SetPoint(VoidModCharacterDB.point.player_up.p, VoidModCharacterDB.point.player_up.x,
         VoidModCharacterDB.point.player_up.y)
     SetPlayerInfoFrameStyle(self.voidPlayerInfo_UP)
@@ -126,7 +129,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
         y = point.player_down.y
     }
     self.voidPlayerInfo_DOWN = CreateFrame("Frame", "PlayerInfo_DOWN", UIParent, "BackdropTemplate")
-    self.voidPlayerInfo_DOWN:SetSize(170, 100)
+    self.voidPlayerInfo_DOWN:SetSize(140, 90)
     self.voidPlayerInfo_DOWN:SetPoint(VoidModCharacterDB.point.player_down.p, VoidModCharacterDB.point.player_down.x,
         VoidModCharacterDB.point.player_down.y)
     SetPlayerInfoFrameStyle(self.voidPlayerInfo_DOWN)
