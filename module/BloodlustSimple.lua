@@ -19,8 +19,8 @@ local bloodlust = {
     },
 
     -- 语音文件路径
-    voice_file = "Interface/AddOns/VoidMod/media/void_voice.ogg",
-    yurin = "Interface/AddOns/VoidMod/media/yurin.wav",
+    voice_file = "Interface/AddOns/MzxMedia/void_voice.ogg",
+    yurin = "Interface/AddOns/MzxMedia/yurin.wav",
 
     hasBloodlust = false,
     lastPlayTime = 0,
@@ -119,14 +119,16 @@ function VoidFrame:DebugBuffs()
     for bloodlustId, bloodlustName in pairs(bloodlust.bloodlust_spell_ids) do
         local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", bloodlustId)
         if auraData then
-            DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00已激活|r" .. bloodlustName:sub(1, 10) .. (auraData.name or "未知") .. " (ID: " .. (auraData.spellId or "?") .. ")|r")
+            DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00已激活|r" ..
+                bloodlustName:sub(1, 10) .. (auraData.name or "未知") .. " (ID: " .. (auraData.spellId or "?") .. ")|r")
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000未找到|r" .. bloodlustName)
         end
     end
 
     -- 显示当前嗜血状态
-    DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00当前嗜血状态: " .. (bloodlust.hasBloodlust and "|cFF00FF00已激活|r" or "|cFFFF0000未激活|r"))
+    DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00当前嗜血状态: " ..
+        (bloodlust.hasBloodlust and "|cFF00FF00已激活|r" or "|cFFFF0000未激活|r"))
 end
 
 ---# 检测萨满三种元素护盾
@@ -136,7 +138,8 @@ function VoidFrame:DebugEleBuff()
     for spellId, spellName in pairs(bloodlust.d_spell_ids) do
         local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", spellId)
         if auraData then
-            DEFAULT_CHAT_FRAME:AddMessage("|cFF888888" .. (auraData.name or "未知") .. " (ID: " .. (auraData.spellId or "?") .. ")|r")
+            DEFAULT_CHAT_FRAME:AddMessage("|cFF888888" ..
+                (auraData.name or "未知") .. " (ID: " .. (auraData.spellId or "?") .. ")|r")
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000未找到" .. spellName .. "护盾|r")
         end
