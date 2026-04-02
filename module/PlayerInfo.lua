@@ -36,10 +36,14 @@ function VoidFrame:Void_PlayerInfo()
     --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
-    local crit = GetCritChance()
-    local haste = GetHaste()
-    local mastery = GetMasteryEffect()
-    local versatility = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
+    local crit, crit_value = GetCritChance(), GetCombatRating(CR_CRIT_MELEE)
+    local haste, haste_value = GetHaste(), GetCombatRating(CR_HASTE_MELEE)
+    local mastery, mastery_value = GetMasteryEffect(), GetCombatRating(CR_MASTERY)
+    local versatility, versatility_value = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE),
+        GetCombatRating(CR_VERSATILITY_DAMAGE_DONE)
+    -- local a, b, c = GetCombatRating(CR_HASTE_MELEE), GetCombatRating(CR_HASTE_RANGED),
+    --     GetCombatRating(CR_HASTE_SPELL)
+    -- print("近战" .. a .. " 远程" .. b .. " 法术" .. c)
     -- local first = string.format("|cFFFFFF00生命：%d\n%s：%d\n护甲：%d\n移速：%.2f%%|r", health, primaryStatName, attribute, armor,
     --     speedPercent)
     -- local info = string.format("|cFF00FF00暴击：%6.2f%%\n急速：%6.2f%%\n精通：%6.2f%%\n全能：%6.2f%%|r", crit, haste, mastery,
@@ -66,10 +70,10 @@ function VoidFrame:Void_PlayerInfo()
     local last_table = {
         name = { "|cFF00FF00暴击|r", "|cFF00FF00急速|r", "|cFF00FF00精通|r", "|cFF00FF00全能|r" },
         value = {
-            string.format("%6.2f%%", crit),
-            string.format("%6.2f%%", haste),
-            string.format("%6.2f%%", mastery),
-            string.format("%6.2f%%", versatility),
+            string.format("%6.2f%%  |cFFFF8C00%d|r", crit, crit_value),
+            string.format("%6.2f%%  |cFFFF8C00%d|r", haste, haste_value),
+            string.format("%6.2f%%  |cFFFF8C00%d|r", mastery, mastery_value),
+            string.format("%6.2f%%  |cFFFF8C00%d|r", versatility, versatility_value),
         },
     }
     return first_table, last_table
@@ -129,7 +133,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
         y = point.player_down.y
     }
     self.voidPlayerInfo_DOWN = CreateFrame("Frame", "PlayerInfo_DOWN", UIParent, "BackdropTemplate")
-    self.voidPlayerInfo_DOWN:SetSize(140, 90)
+    self.voidPlayerInfo_DOWN:SetSize(170, 90)
     self.voidPlayerInfo_DOWN:SetPoint(VoidModCharacterDB.point.player_down.p, VoidModCharacterDB.point.player_down.x,
         VoidModCharacterDB.point.player_down.y)
     SetPlayerInfoFrameStyle(self.voidPlayerInfo_DOWN)
@@ -142,8 +146,8 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
         self.voidPlayerInfo_DOWN:CreateFontString(nil, "OVERLAY", "GameTooltipText"),
     }
 
-    AddStringLeft(self.voidPlayerInfoText_DOWN[1], table.concat(info.name, "\n"), 1.2)
-    AddStringRight(self.voidPlayerInfoText_DOWN[2], table.concat(info.value, "\n"), 1.2)
+    AddStringLeft(self.voidPlayerInfoText_DOWN[1], table.concat(info.name, "\n"), 1.1)
+    AddStringRight(self.voidPlayerInfoText_DOWN[2], table.concat(info.value, "\n"), 1.1)
 end
 
 --- # 创建玩家信息框体
