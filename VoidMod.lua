@@ -8,7 +8,7 @@ VoidFrame:RegisterEvent("UNIT_COMBAT")  -- 当 NPC 或玩家参与战斗并受�
 VoidFrame:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
 VoidFrame:RegisterEvent("GROUP_INVITE_CONFIRMATION")
 VoidFrame:RegisterEvent("LFG_ROLE_CHECK_SHOW")
-VoidFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- 战斗日志
+-- VoidFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- 战斗日志
 
 VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
@@ -43,9 +43,9 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
         print("排本")
         C_Timer.After(0.1, function() LFDRoleCheckPopupAcceptButton:Click() end)
     end
-    if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-        self:GetGroupBuffs()
-    end
+    -- if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+    --     self:GetGroupBuffs()
+    -- end
 end)
 
 VoidFrame:SetScript("OnUpdate", function(self, delta)
