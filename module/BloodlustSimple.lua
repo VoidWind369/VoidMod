@@ -12,6 +12,10 @@ local bloodlust = {
         [354646] = "|cFFC69B6D戈姆毒气|r",
     },
 
+    bloodlust_debuffs = {
+        [57724] = "|cFF0070DE嗜血 Bloodlust|r"
+    },
+
     d_spell_ids = {
         [192106] = "闪电护盾",
         [52127] = "水之护盾",
