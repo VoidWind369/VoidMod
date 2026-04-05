@@ -1,13 +1,14 @@
 -- 创建主框架
 VoidFrame = CreateFrame("Frame", "VoidModFrame", UIParent)
-VoidFrame:RegisterEvent("PLAYER_LOGIN")
-VoidFrame:RegisterEvent("UNIT_AURA")
-VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")
-VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST")
-VoidFrame:RegisterEvent("UNIT_COMBAT")
+VoidFrame:RegisterEvent("PLAYER_LOGIN") -- 用户登录
+VoidFrame:RegisterEvent("UNIT_AURA")    -- 获得或消失的增益、减益、状态或物品加成
+VoidFrame:RegisterEvent("CHAT_MSG_WHISPER") -- 收到其他玩家的低语
+VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST") -- 排本邀请
+VoidFrame:RegisterEvent("UNIT_COMBAT")  -- 当 NPC 或玩家参与战斗并受到伤害时触发
 VoidFrame:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
 VoidFrame:RegisterEvent("GROUP_INVITE_CONFIRMATION")
 VoidFrame:RegisterEvent("LFG_ROLE_CHECK_SHOW")
+VoidFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- 战斗日志
 
 VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
@@ -25,18 +26,25 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
             end
         end
         -- self:Void_UpdatePlayerInfoDisplay()
-    elseif event == "CHAT_MSG_WHISPER" then
+    end
+    if event == "CHAT_MSG_WHISPER" then
         self:MessageStart(...)
-    elseif event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then
+    end
+    if event == "PARTY_INVITE_REQUEST" or event == "GROUP_INVITE_CONFIRMATION" then
         local unit = ...
         if unit ~= nil then
             self:PartyStart(...)
         end
-    elseif event == "UNIT_COMBAT" then
+    end
+    if event == "UNIT_COMBAT" then
         self:Void_UpdatePlayerInfoDisplay()
-    elseif event == "LFG_ROLE_CHECK_SHOW" then
+    end
+    if event == "LFG_ROLE_CHECK_SHOW" then
         print("排本")
         C_Timer.After(0.1, function() LFDRoleCheckPopupAcceptButton:Click() end)
+    end
+    if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+        self:GetGroupBuffs()
     end
 end)
 

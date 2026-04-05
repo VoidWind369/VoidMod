@@ -3,17 +3,18 @@ function WhiteTransparentFrame(self, infos)
     local bar_width = (infos.dot_size + infos.dot_spacing) * infos.max_stacks
     local bar_height = infos.dot_size + 10
 
-    local r, g, b, i = 1, 1, 0.9, 2
+    local r, g, b, i = 0, 0, 0.1, 3
 
     self:SetSize(bar_width + infos.dot_spacing + 12, bar_height + infos.dot_spacing)
     self:SetBackdrop({
+        -- bgFile = "interface/pvpframe/pvpscoreboard-background",
         bgFile = "Interface/Tooltips/UI-Tooltip-Background",
         edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-        edgeSize = 12,
+        edgeSize = 16,
         insets = { left = i, right = i, top = i, bottom = i },
     })
-    self:SetBackdropColor(r, g, b, 0.5)
-    self:SetBackdropBorderColor(r, g, b, 0.7)
+    self:SetBackdropColor(r, g, b, 0.4)
+    self:SetBackdropBorderColor(r, g, b, 0.6)
 end
 
 function WhiteTransparentDot(i, dot, infos)
@@ -37,24 +38,34 @@ end
 function WhiteTransparentDotTex(dotTex, infos)
     dotTex:SetSize(infos.dot_size, infos.dot_size)
     dotTex:SetPoint("CENTER")
-    dotTex:SetTexture(518448)
-    -- dotTex:SetTexture("Interface/SpellActivationOverlay/IconAlert")
+    -- dotTex:SetTexture(518448)
+    -- dotTex:SetTexture("interface/common/commonroundhighlight")
+    -- interface/masks/circlemaskscalable 实心圆1
+    -- interface/talentframe/talentsmasknodecircle 实心圆2
+    -- interface/common/commonmaskcircle 实心圆3
+    -- interface/common/commonroundhighlight 空心圆
+    -- dotTex:SetTexture("interface/masks/circlemaskscalable")
+    -- dotTex:SetTexCoord(0.5751953125, 0.818359375, 0.34912109375, 0.5927734375)
+    --
+    dotTex:SetTexture("interface/housing/exteriorcustomization")
+    dotTex:SetTexCoord(0.41015625, 0.80859375, 0.00390625, 0.40234375)
     -- 初始状态
     dotTex:SetGradient("VERTICAL",
         CreateColor(0.5, 0.5, 0.5, 1),
-        CreateColor(0.2, 0.2, 0.2, 1)
+        CreateColor(0.6, 0.6, 0.6, 1)
     )
 end
 
 --- # 框体通用属性
 function SetInfoFrameStyle(frame)
-    frame:SetFrameStrata("HIGH")
     frame:SetBackdrop({
-        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+        bgFile = "interface/framegeneral/uiframemidnightbackground",
+        -- bgFile = "Interface/Tooltips/UI-Tooltip-Background",
         edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
         edgeSize = 12,
         insets = { left = 6, right = 6, top = 6, bottom = 6 },
     })
+    -- frame:SetTexCoord(0.00048828125, 0.46826171875, 0.00048828125, 0.39501953125)
     frame:SetBackdropColor(0, 0, 0, 0.3)
     frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
 end

@@ -26,6 +26,22 @@ local bloodlust = {
     lastPlayTime = 0,
 }
 
+function VoidFrame:GetGroupBuffs()
+    local timestamp, subevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destRaidFlags =
+        CombatLogGetCurrentEventInfo()
+    print(subevent, hideCaster, sourceGUID, sourceName)
+    if subevent == "SPELL_SUMMON" and sourceGUID == UnitGUID("player") then
+        local spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand =
+            select(12, CombatLogGetCurrentEventInfo())
+
+        if tContains(totem_dance.windfury_totem_spell_id, spellId) then
+            -- 更新时间
+            totem_dance.totem_end_time = GetTime() + 10.000
+        end
+        -- 更新时间
+    end
+end
+
 ---# 监控嗜血buff
 function VoidFrame:CheckBloodlust()
     local foundBuff = false

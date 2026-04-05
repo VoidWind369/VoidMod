@@ -79,16 +79,16 @@ function VoidFrame:Void_PlayerInfo()
     return first_table, last_table
 end
 
-function SetPlayerInfoFrameStyle(frame)
-    frame:SetBackdrop({
-        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-        edgeSize = 12,
-        insets = { left = 6, right = 6, top = 6, bottom = 6 },
-    })
-    frame:SetBackdropColor(0, 0, 0, 0.3)
-    frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
-end
+-- function SetPlayerInfoFrameStyle(frame)
+--     frame:SetBackdrop({
+--         bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+--         edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+--         edgeSize = 12,
+--         insets = { left = 6, right = 6, top = 6, bottom = 6 },
+--     })
+--     frame:SetBackdropColor(0, 0, 0, 0.3)
+--     frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.5)
+-- end
 
 --- # 显示文字通用属性
 -- function AddString(fontString, string)
@@ -112,7 +112,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_UP(first)
     self.voidPlayerInfo_UP:SetSize(170, 110)
     self.voidPlayerInfo_UP:SetPoint(VoidModCharacterDB.point.player_up.p, VoidModCharacterDB.point.player_up.x,
         VoidModCharacterDB.point.player_up.y)
-    SetPlayerInfoFrameStyle(self.voidPlayerInfo_UP)
+    SetInfoFrameStyle(self.voidPlayerInfo_UP)
 
     -- self.voidPlayerInfoText_UP = self.voidPlayerInfo_UP:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 
@@ -136,7 +136,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
     self.voidPlayerInfo_DOWN:SetSize(170, 90)
     self.voidPlayerInfo_DOWN:SetPoint(VoidModCharacterDB.point.player_down.p, VoidModCharacterDB.point.player_down.x,
         VoidModCharacterDB.point.player_down.y)
-    SetPlayerInfoFrameStyle(self.voidPlayerInfo_DOWN)
+    SetInfoFrameStyle(self.voidPlayerInfo_DOWN)
 
     -- self.voidPlayerInfoText_DOWN = self.voidPlayerInfo_DOWN:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 

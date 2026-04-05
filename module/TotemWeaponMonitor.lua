@@ -79,20 +79,20 @@ function VoidFrame:UpdateDotProgress(stacks)
 
         if i <= stacks then
             -- 激活的小圆点 - 饱满的纵向渐变
-            -- dot.tex.SetColorTexture(0.8, 0.9, 1.0, alpha)
             dot.tex:SetGradient("VERTICAL", topColor, bottomColor)
-
-            -- 发光效果
-            -- dot.glow:SetGradient("VERTICAL", topColor, bottomColor)
-            -- dot.glow:Show()
+            if stacks > 9 then
+                self.dotFrame:SetBackdropColor(0, 0, 0.1, 0.65)
+            else
+                self.dotFrame:SetBackdropColor(0, 0, 0.1, 0.4)
+            end
             dot:SetAlpha(1)
         else
             -- 未激活的小圆点 - 深灰色渐变
             dot.tex:SetGradient("VERTICAL",
-                CreateColor(0.5, 0.5, 0.5, alpha),
-                CreateColor(0.2, 0.2, 0.2, alpha)
+                CreateColor(0.5, 0.5, 0.5, 1),
+                CreateColor(0.6, 0.6, 0.6, 1)
             )
-            -- dot.glow:Hide()
+            self.dotFrame:SetBackdropColor(0, 0, 0.1, 0.4)
             dot:SetAlpha(0.3)
         end
     end
@@ -102,13 +102,14 @@ function VoidFrame:GetGradientColorsSM(stacks, alpha)
     -- 饱满的金属渐变色
     if stacks <= 5 then
         -- 蓝色金属
-        return CreateColor(0.8, 0.9, 1.0, alpha), CreateColor(0.2, 0.4, 0.9, alpha)
+        return CreateColor(0, 0.8, 1.0, alpha), CreateColor(0, 1.0, 0.9, alpha)
     elseif stacks <= 9 then
         -- 金色金属
-        return CreateColor(1.0, 0.5, 0.0, alpha), CreateColor(1.0, 0.7, 0.0, alpha)
+        return CreateColor(1.0, 0.5, 0.0, alpha), CreateColor(1.0, 1.0, 0.0, alpha)
     else
         -- 红色金属
-        return CreateColor(1.0, 0.4, 0.4, alpha), CreateColor(1.0, 0.0, 0.0, alpha)
+        -- return CreateColor(1.0, 0.3, 0.3, alpha), CreateColor(1.0, 0.5, 0.5, alpha)
+        return CreateColor(1.0, 0, 0, alpha), CreateColor(1.0, 0.8, 0.8, alpha)
     end
 end
 
