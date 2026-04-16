@@ -18,3 +18,4 @@ module\BoneShieldMonitor.lua
 module\MessageBot.lua
 module\PlayerInfo.lua
 module\ButtonAuto.lua
+module\DeathKnight\TargetBuff.lua

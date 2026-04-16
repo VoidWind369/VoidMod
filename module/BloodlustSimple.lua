@@ -12,9 +12,7 @@ local bloodlust = {
         [354646] = "|cFFC69B6D戈姆毒气|r",
     },
 
-    bloodlust_debuffs = {
-        [57724] = "|cFF0070DE嗜血 Bloodlust|r"
-    },
+    bloodlust_debuffs = { 57723, 57724, 80354, 95809, 160455, 207400, 264689, 390435 },
 
     d_spell_ids = {
         [192106] = "闪电护盾",
@@ -47,35 +45,85 @@ function VoidFrame:GetGroupBuffs()
 end
 
 ---# 监控嗜血buff
-function VoidFrame:CheckBloodlust()
-    local foundBuff = false
-    local buffName = ""
-    local spellIdFound = 0
+function VoidFrame:GetBloodlust(updateInfo)
+    local foundBuff, buffName, spellIdFound = false, "", 0
 
-    for bloodlustId, _ in pairs(bloodlust.bloodlust_spell_ids) do
-        local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", bloodlustId)
-        if auraData then
-            foundBuff = true
-            buffName = auraData.name
-            spellIdFound = auraData.spellId
-            break
+    C_Timer.After(0.5, function()
+        if updateInfo.addedAuras then
+            for _, bloodlustId in ipairs(bloodlust.bloodlust_debuffs) do
+                local aura = _G.C_UnitAuras.GetPlayerAuraBySpellID(bloodlustId)
+                if aura then
+                    foundBuff = true
+                    buffName = aura.name
+                    spellIdFound = bloodlustId
+                    break
+                end
+                print("嗜血", bloodlustId, foundBuff, bloodlust.hasBloodlust)
+            end
+        elseif updateInfo.removedAuraInstanceIDs then
+            for _, bloodlustId in ipairs(bloodlust.bloodlust_debuffs) do
+                local aura = _G.C_UnitAuras.GetPlayerAuraBySpellID(bloodlustId)
+                if aura then
+                    foundBuff = true
+                    buffName = aura.name
+                    spellIdFound = aura.spellId
+                    break
+                end
+            end
         end
+
+        print("status", foundBuff, buffName, spellIdFound, bloodlust.hasBloodlust)
+        -- 处理buff状态变化
+        if foundBuff and not bloodlust.hasBloodlust then
+            self:OnBloodlustGained(buffName, spellIdFound, "wav")
+            bloodlust.hasBloodlust = true
+        elseif not foundBuff and bloodlust.hasBloodlust then
+            bloodlust.hasBloodlust = false
+        end
+    end)
+end
+
+---# 监控嗜血buff
+function VoidFrame:CheckBloodlust()
+    local foundBuff, buffName, spellIdFound, hasteState = false, "", 0, 0
+
+    local haste = GetHaste()
+    if haste - VoidModCharacterDB.haste >= 30 then
+        hasteState = 1
+    elseif VoidModCharacterDB.haste - haste >= 30 then
+        hasteState = -1
+    else
+        hasteState = 0
     end
 
-    -- 处理buff状态变化
-    if foundBuff and not bloodlust.hasBloodlust then
-        self:OnBloodlustGained(buffName, spellIdFound, "wav")
-        bloodlust.hasBloodlust = true
-    elseif not foundBuff and bloodlust.hasBloodlust then
-        bloodlust.hasBloodlust = false
-    end
+    C_Timer.After(0.5, function()
+        for _, bloodlustId in ipairs(bloodlust.bloodlust_debuffs) do
+            local auraData = C_UnitAuras.GetUnitAuraBySpellID("player", bloodlustId)
+            if auraData then
+                foundBuff = true
+                buffName = auraData.name
+                spellIdFound = auraData.spellId
+                break
+            end
+        end
+
+        -- 处理buff状态变化
+        if foundBuff and not bloodlust.hasBloodlust and hasteState > 0 then
+            self:OnBloodlustGained(buffName, spellIdFound, "wav")
+            bloodlust.hasBloodlust = true
+        elseif not foundBuff and bloodlust.hasBloodlust and hasteState < 1 then
+            bloodlust.hasBloodlust = false
+        else
+            bloodlust.hasBloodlust = false
+        end
+    end)
 end
 
 function VoidFrame:OnBloodlustGained(buffName, spellId, ogg)
     local currentTime = GetTime()
 
-    -- 防止重复播放（10秒内）
-    if currentTime - bloodlust.lastPlayTime < 10 then
+    -- 防止重复播放（40秒内）
+    if currentTime - bloodlust.lastPlayTime < 40 then
         return
     end
 

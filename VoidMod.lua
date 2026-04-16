@@ -1,10 +1,10 @@
 -- 创建主框架
 VoidFrame = CreateFrame("Frame", "VoidModFrame", UIParent)
-VoidFrame:RegisterEvent("PLAYER_LOGIN") -- 用户登录
-VoidFrame:RegisterEvent("UNIT_AURA")    -- 获得或消失的增益、减益、状态或物品加成
-VoidFrame:RegisterEvent("CHAT_MSG_WHISPER") -- 收到其他玩家的低语
+VoidFrame:RegisterEvent("PLAYER_LOGIN")         -- 用户登录
+VoidFrame:RegisterEvent("UNIT_AURA")            -- 获得或消失的增益、减益、状态或物品加成
+VoidFrame:RegisterEvent("CHAT_MSG_WHISPER")     -- 收到其他玩家的低语
 VoidFrame:RegisterEvent("PARTY_INVITE_REQUEST") -- 排本邀请
-VoidFrame:RegisterEvent("UNIT_COMBAT")  -- 当 NPC 或玩家参与战斗并受到伤害时触发
+VoidFrame:RegisterEvent("UNIT_COMBAT")          -- 当 NPC 或玩家参与战斗并受到伤害时触发
 VoidFrame:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
 VoidFrame:RegisterEvent("GROUP_INVITE_CONFIRMATION")
 VoidFrame:RegisterEvent("LFG_ROLE_CHECK_SHOW")
@@ -14,8 +14,9 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
         self:Initialize()
     elseif event == "UNIT_AURA" then
-        local unit = ...
-        if unit == "player" then
+        local unitTarget, updateInfo = ...
+        if unitTarget == "player" then
+            -- self:GetBloodlust(updateInfo)
             self:CheckBloodlust()
             -- 判断是否增强萨满
             if GetSpecializationInfo(GetSpecialization()) == 263 then
@@ -50,6 +51,9 @@ end)
 
 VoidFrame:SetScript("OnUpdate", function(self, delta)
     self:Void_UpdatePlayerInfoDisplay()
+    -- if InCombatLockdown() then
+    --     GetTargetBuff()
+    -- end
 end)
 
 function VoidFrame:Initialize()
@@ -99,7 +103,8 @@ function VoidFrame:HandleSlashCommand(msg)
     elseif command == "twm scale" then
         self:ToggleScale()
     elseif command == "info" then
-        self:Void_PlayerInfo()
+        -- self:Void_PlayerInfo()
+        PrintCombatRating()
     elseif command == "new" then
         NewDatabase()
     else

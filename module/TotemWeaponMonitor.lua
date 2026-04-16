@@ -23,7 +23,6 @@ local totemWeapon = {
 }
 
 function VoidFrame:CreateDotProgress()
-    print("加载漩涡武器")
     VoidModCharacterDB.point.totemWeapon = VoidModCharacterDB.point.totemWeapon or {
         p = totemWeapon.up.p,
         x = totemWeapon.up.x,
