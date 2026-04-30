@@ -87,14 +87,14 @@ end
 function VoidFrame:CheckBloodlust()
     local foundBuff, buffName, spellIdFound, hasteState = false, "", 0, 0
 
-    local haste = GetHaste()
-    if haste - VoidModCharacterDB.haste >= 30 then
-        hasteState = 1
-    elseif VoidModCharacterDB.haste - haste >= 30 then
-        hasteState = -1
-    else
-        hasteState = 0
-    end
+    -- local haste = GetHaste()
+    -- if haste - VoidModCharacterDB.haste >= 30 then
+    --     hasteState = 1
+    -- elseif VoidModCharacterDB.haste - haste >= 30 then
+    --     hasteState = -1
+    -- else
+    --     hasteState = 0
+    -- end
 
     C_Timer.After(0.5, function()
         for _, bloodlustId in ipairs(bloodlust.bloodlust_debuffs) do
@@ -108,10 +108,10 @@ function VoidFrame:CheckBloodlust()
         end
 
         -- 处理buff状态变化
-        if foundBuff and not bloodlust.hasBloodlust and hasteState > 0 then
+        if foundBuff and not bloodlust.hasBloodlust then
             self:OnBloodlustGained(buffName, spellIdFound, "wav")
             bloodlust.hasBloodlust = true
-        elseif not foundBuff and bloodlust.hasBloodlust and hasteState < 1 then
+        elseif not foundBuff and bloodlust.hasBloodlust then
             bloodlust.hasBloodlust = false
         else
             bloodlust.hasBloodlust = false
@@ -123,7 +123,7 @@ function VoidFrame:OnBloodlustGained(buffName, spellId, ogg)
     local currentTime = GetTime()
 
     -- 防止重复播放（40秒内）
-    if currentTime - bloodlust.lastPlayTime < 40 then
+    if currentTime - bloodlust.lastPlayTime < 600 then
         return
     end
 

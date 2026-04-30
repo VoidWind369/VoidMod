@@ -31,8 +31,9 @@ function VoidFrame:Void_PlayerInfo()
     local health = UnitHealthMax("player")
     local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
 
-    local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed("player")
-    local speedPercent = (currentSpeed / 7) * 100 -- 7是基础奔跑速度
+    local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
+    local currentSpeed = isGliding and forwardSpeed or GetUnitSpeed("player")
+    local speedPercent = Round(currentSpeed / BASE_MOVEMENT_SPEED * 100)
     --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
@@ -77,13 +78,13 @@ function VoidFrame:Void_PlayerInfo()
     local last_table = {
         name = { "|cFF00FF00暴击|r", "|cFF00FF00急速|r", "|cFF00FF00精通|r", "|cFF00FF00全能|r", "|cFF228B22吸血|r", "|cFF228B22闪避|r", "|cFF228B22加速|r" },
         value = {
-            string.format("%6.2f%%  |cFFFF8C00%d|r", crit, crit_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", haste, haste_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", mastery, mastery_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", versatility, versatility_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", leech, leech_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", avoidance, avoidance_value),
-            string.format("%6.2f%%  |cFFFF8C00%d|r", speed, speed_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", crit, crit_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", haste, haste_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", mastery, mastery_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", versatility, versatility_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", leech, leech_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", avoidance, avoidance_value),
+            string.format("%.2f%%  |cFFFF8C00%d|r", speed, speed_value),
         },
     }
     return first_table, last_table
