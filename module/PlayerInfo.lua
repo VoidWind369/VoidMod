@@ -27,13 +27,15 @@ function VoidFrame:Void_PlayerInfo()
 
     -- 装等
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    local itemLevel = avgItemLevelEquipped == avgItemLevel and "|cFFFF69B4" .. avgItemLevel .. "|r" or
+        string.format("|cFFFF69B4%.1f|r/%.1f", avgItemLevelEquipped, avgItemLevel)
 
     local health = UnitHealthMax("player")
     local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
 
     local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
     local currentSpeed = isGliding and forwardSpeed or GetUnitSpeed("player")
-    local speedPercent = Round(currentSpeed / BASE_MOVEMENT_SPEED * 100)
+    local speedPercent = InCombatLockdown() and 0 or Round(currentSpeed / BASE_MOVEMENT_SPEED * 100)
     --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
@@ -65,27 +67,25 @@ function VoidFrame:Void_PlayerInfo()
             "|cFFFFFF00护甲|r",
             "|cFFFFFF00移速|r",
         },
-        value = {
-            avgItemLevelEquipped == avgItemLevel and "|cFFFF69B4" .. avgItemLevel .. "|r" or
-            string.format("|cFFFF69B4%.1f|r/%.1f", avgItemLevelEquipped, avgItemLevel),
-            health,
-            attribute,
-            armor,
+        value =
+            itemLevel .. "\n" ..
+            health .. "\n" ..
+            attribute .. "\n" ..
+            armor .. "\n" ..
             string.format("%.2f%%", speedPercent),
-        }
+
     }
 
     local last_table = {
         name = { "|cFF00FF00暴击|r", "|cFF00FF00急速|r", "|cFF00FF00精通|r", "|cFF00FF00全能|r", "|cFF228B22吸血|r", "|cFF228B22闪避|r", "|cFF228B22加速|r" },
-        value = {
-            string.format("%.2f%%  |cFFFF8C00%d|r", crit, crit_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", haste, haste_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", mastery, mastery_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", versatility, versatility_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", leech, leech_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", avoidance, avoidance_value),
-            string.format("%.2f%%  |cFFFF8C00%d|r", speed, speed_value),
-        },
+        value =
+            string.format("%.2f%%", crit) .. "  |cFFFF8C00" .. crit_value .. "|r\n" ..
+            string.format("%.2f%%", haste) .. "  |cFFFF8C00" .. haste_value .. "|r\n" ..
+            string.format("%.2f%%", mastery) .. "  |cFFFF8C00" .. mastery_value .. "|r\n" ..
+            string.format("%.2f%%", versatility) .. "  |cFFFF8C00" .. versatility_value .. "|r\n" ..
+            string.format("%.2f%%", leech) .. "  |cFFFF8C00" .. leech_value .. "|r\n" ..
+            string.format("%.2f%%", avoidance) .. "  |cFFFF8C00" .. avoidance_value .. "|r\n" ..
+            string.format("%.2f%%", speed) .. "  |cFFFF8C00" .. speed_value .. "|r",
     }
     return first_table, last_table
 end
@@ -119,7 +119,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_UP(first)
         self.voidPlayerInfo_UP:CreateFontString(nil, "OVERLAY", "GameTooltipText"),
     }
     AddStringLeft(self.voidPlayerInfoText_UP[1], table.concat(first.name, "\n"), 1.1)
-    AddStringRight(self.voidPlayerInfoText_UP[2], table.concat(first.value, "\n"), 1.1)
+    AddStringRight(self.voidPlayerInfoText_UP[2], first.value, 1.1)
 end
 
 --- # 创建副属性框体
@@ -144,7 +144,7 @@ function VoidFrame:Void_CreatePlayerInfoDisplay_Down(info)
     }
 
     AddStringLeft(self.voidPlayerInfoText_DOWN[1], table.concat(info.name, "\n"))
-    AddStringRight(self.voidPlayerInfoText_DOWN[2], table.concat(info.value, "\n"))
+    AddStringRight(self.voidPlayerInfoText_DOWN[2], info.value)
 end
 
 --- # 创建玩家信息框体
@@ -167,8 +167,8 @@ function VoidFrame:Void_UpdatePlayerInfoDisplay()
     if self.voidPlayerInfo_UP and self.voidPlayerInfo_DOWN then
         local first, info = VoidFrame:Void_PlayerInfo()
         self.voidPlayerInfoText_UP[1]:SetText(table.concat(first.name, "\n"))
-        self.voidPlayerInfoText_UP[2]:SetText(table.concat(first.value, "\n"))
+        self.voidPlayerInfoText_UP[2]:SetText(first.value)
         self.voidPlayerInfoText_DOWN[1]:SetText(table.concat(info.name, "\n"))
-        self.voidPlayerInfoText_DOWN[2]:SetText(table.concat(info.value, "\n"))
+        self.voidPlayerInfoText_DOWN[2]:SetText(info.value)
     end
 end

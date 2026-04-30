@@ -49,12 +49,16 @@ VoidFrame:SetScript("OnEvent", function(self, event, ...)
     -- end
 end)
 
-VoidFrame:SetScript("OnUpdate", function(self, delta)
-    self:Void_UpdatePlayerInfoDisplay()
-    -- if InCombatLockdown() then
-    --     GetTargetBuff()
-    -- end
+C_Timer.NewTicker(.1, function()
+    VoidFrame:Void_UpdatePlayerInfoDisplay()
 end)
+
+-- VoidFrame:SetScript("OnUpdate", function(self, delta)
+--     self:Void_UpdatePlayerInfoDisplay()
+--     -- if InCombatLockdown() then
+--     --     GetTargetBuff()
+--     -- end
+-- end)
 
 function VoidFrame:Initialize()
     -- 加载数据库
