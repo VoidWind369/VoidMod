@@ -33,9 +33,23 @@ function VoidFrame:Void_PlayerInfo()
     local health = UnitHealthMax("player")
     local base, effectiveArmor, armor, bonusArmor = UnitArmor("player")
 
+    -- 移动速度
+    local SPEED_FORMAT_OPTIONS = {
+        breakpointData = {
+            {
+                breakpoint = 0,
+                abbreviation = "%",
+                significandDivisor = 0.006999,
+                fractionDivisor = 10,
+                abbreviationIsGlobal = false,
+            },
+        },
+    }
     local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
     local currentSpeed = isGliding and forwardSpeed or GetUnitSpeed("player")
-    local speedPercent = InCombatLockdown() and 0 or Round(currentSpeed / BASE_MOVEMENT_SPEED * 100)
+    -- local speedPercent = InCombatLockdown() and AbbreviateNumbers(currentSpeed, SPEED_FORMAT_OPTIONS) or
+    --     string.format("%.2f%%", Round(currentSpeed / BASE_MOVEMENT_SPEED * 100))
+    local speedPercent = AbbreviateNumbers(currentSpeed, SPEED_FORMAT_OPTIONS)
     --local power = UnitPower("player", Enum.PowerType.Mana)
 
     -- 副属性
@@ -72,7 +86,7 @@ function VoidFrame:Void_PlayerInfo()
             health .. "\n" ..
             attribute .. "\n" ..
             armor .. "\n" ..
-            string.format("%.2f%%", speedPercent),
+            speedPercent,
 
     }
 
