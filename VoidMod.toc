@@ -2,7 +2,7 @@
 ## Title: |CFF8845ECV|r|CFFA037E9o|r|CFFA435E8i|r|CFFB32DE6d|r|CFFBC26E5M|r|CFFCB1EE3o|r|CFFDD14E0d|r
 ## Notes: Mzx插件整合
 ## Author: Muzixi
-## Version: 1.0.3
+## Version: 1.0.3-r1
 ## SavedVariables: VoidModDB
 ## SavedVariablesPerCharacter: VoidModCharacterDB
 ## IconTexture: Interface\AddOns\VoidMod\Moon.png
